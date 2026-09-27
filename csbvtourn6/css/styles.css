@@ -575,7 +575,10 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .spon-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;
   font-size:1.15rem;color:var(--text);}
 .spon-desc{font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:6px;}
-.spon-link{margin-top:12px;font-size:.8rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+.spon-links{margin-top:12px;display:flex;flex-direction:column;gap:5px;align-items:center;
+  font-size:.8rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+.spon-links a{opacity:.9;}
+.spon-links a:hover{opacity:1;text-decoration:underline;}
 .spon-thanks{text-align:center;color:var(--muted);font-size:.82rem;margin-top:24px;line-height:1.6;}
 
 /* footer strip shown under every view */

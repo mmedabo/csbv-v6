@@ -10,13 +10,13 @@ import { state, isAdmin, isConfigured } from "./state.js";
 const SPONSORS = [
   { name:"KYDRA", logo:"sponsor-kydra.png", color:"#E8F5E4",
     desc:"Craft activewear, designed in Singapore. Work · Training · Life.",
-    link:"kydra.co", href:"https://kydra.co" },
+    link:"kydra.co", href:"https://www.kydra.co", ig:"kydraofficial" },
   { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#4DD9E8",
     desc:"Cold-water recovery & ice baths to keep players fresh all day.",
-    link:"theicebathclubs.com", href:"https://www.theicebathclubs.com" },
+    link:"theicebathclubs.com", href:"https://www.theicebathclubs.com", ig:"icebathclub_sg" },
   { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#FF6B3D",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
-    link:"", href:"" },
+    link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
 
 function sponsorFooter() {
@@ -32,9 +32,14 @@ function sponsorFooter() {
 
 function sponsorsContent() {
   const cards = SPONSORS.map(s => {
-    const linkHTML = s.link
-      ? `<div class="spon-link"><a href="${esc(s.href)}" target="_blank" rel="noopener" style="color:${s.color}">${esc(s.link)} &rarr;</a></div>`
+    const webLink = s.link
+      ? `<a href="${esc(s.href)}" target="_blank" rel="noopener" style="color:${s.color}">&#127760; ${esc(s.link)}</a>`
       : "";
+    const igLink = s.ig
+      ? `<a href="https://instagram.com/${esc(s.ig)}" target="_blank" rel="noopener" style="color:${s.color}">&#128247; @${esc(s.ig)}</a>`
+      : "";
+    const linksHTML = (webLink || igLink)
+      ? `<div class="spon-links">${webLink}${igLink}</div>` : "";
     return `
       <div class="spon-card" style="border-top:3px solid ${s.color}">
         <div class="spon-logo-wrap">
@@ -44,7 +49,7 @@ function sponsorsContent() {
         </div>
         <div class="spon-name">${esc(s.name)}</div>
         <div class="spon-desc">${esc(s.desc)}</div>
-        ${linkHTML}
+        ${linksHTML}
       </div>`;
   }).join("");
 
