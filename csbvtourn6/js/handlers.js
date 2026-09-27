@@ -106,7 +106,7 @@ window.exportPNG = async () => {
   if (btn) { btn.textContent = "&#9203; Capturing..."; btn.disabled = true; }
   try {
     const canvas = await html2canvas(document.getElementById("root"), {
-      backgroundColor: "#0C1A14",
+      backgroundColor: "#000000",
       scale: 2,
       useCORS: true,
       ignoreElements: el => el.classList.contains("no-print"),

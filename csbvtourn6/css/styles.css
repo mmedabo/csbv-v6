@@ -1,5 +1,5 @@
 :root{
-  --bg:#0C1A14;--surface:#122010;--card:#18291A;--border:#2A4A2E;
+  --bg:#000000;--surface:#122010;--card:#18291A;--border:#2A4A2E;
   --accent:#C8F04A;--coral:#FF6B3D;--sky:#4DD9E8;--purple:#B57BFF;
   --gold:#FFD166;--muted:#5A7A5E;--text:#E8F5E4;--dim:#8AAF8E;
 }
@@ -590,21 +590,21 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   font-size:.9rem;color:var(--dim);}
 .spon-footer-sep{color:var(--border);}
 
-/* ---- Sponsor logo strips (top bar on every view + landing hero) ---- */
-.spon-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;
-  padding:8px 16px;margin-bottom:6px;background:var(--surface);
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.spon-bar-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;
-  font-size:.68rem;color:var(--muted);}
-.spon-logorow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;}
-.spon-logo-link{display:inline-flex;align-items:center;opacity:.92;transition:opacity .18s,transform .18s;}
+/* ---- Sponsor split logo bar (1 logo left, 2 right) ---- */
+.spon-splitbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 16px;width:100%;box-sizing:border-box;}
+.spon-splitbar-bar{background:#000;border-bottom:1px solid var(--border);}
+.spon-splitbar-hero{padding:14px 4px 6px;}
+.spon-side{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.spon-side:last-child{justify-content:flex-end;}
+.spon-logo-link{display:inline-flex;align-items:center;opacity:.94;transition:opacity .18s,transform .18s;}
 .spon-logo-link:hover{opacity:1;transform:translateY(-1px);}
-.spon-logorow img{width:auto;object-fit:contain;border-radius:6px;display:block;}
-.spon-logorow-bar img{height:30px;max-height:30px;}
-.spon-logorow-hero img{height:64px;max-height:64px;}
+.spon-splitbar img{width:auto;object-fit:contain;border-radius:6px;display:block;}
+.spon-splitbar-bar img{height:30px;max-height:30px;}
+.spon-splitbar-hero img{height:54px;max-height:54px;}
 
-.landing-sponsors{margin:28px auto 8px;text-align:center;display:flex;flex-direction:column;
-  align-items:center;gap:14px;}
+.landing-sponsors{margin:22px auto 6px;text-align:center;display:flex;flex-direction:column;
+  align-items:center;gap:10px;}
 .landing-spon-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;
   font-size:.8rem;color:var(--dim);}
 .landing-spon-prize{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;
@@ -612,6 +612,7 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;
   font-size:.82rem;font-weight:600;}
 @media (max-width:480px){
-  .spon-logorow-hero img{height:48px;max-height:48px;}
-  .spon-logorow-bar img{height:26px;max-height:26px;}
+  .spon-splitbar-hero img{height:40px;max-height:40px;}
+  .spon-splitbar-bar img{height:24px;max-height:24px;}
+  .spon-side{gap:10px;}
 }

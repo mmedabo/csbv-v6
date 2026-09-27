@@ -30,21 +30,20 @@ function sponsorFooter() {
     </div>`;
 }
 
-// Horizontal row of clickable sponsor logos. variant: "bar" (compact, in-page
-// top strip) or "hero" (large, landing page).
-function sponsorLogoRow(variant) {
-  return SPONSORS.map(s => `
-    <a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">
-      <img src="images/${s.logo}" alt="${esc(s.name)}"/>
-    </a>`).join("");
+function sponsorLogoLink(s) {
+  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">
+    <img src="images/${s.logo}" alt="${esc(s.name)}"/></a>`;
 }
 
-// Slim "supported by" logo strip shown at the top of every tournament view.
-function sponsorTopBar() {
+// Sponsor logo bar pinned at the very top: one logo on the left, two on the
+// right. variant "bar" (compact, tournament views) or "hero" (large, landing).
+function sponsorSplitBar(variant) {
+  const left  = SPONSORS[0];
+  const right = SPONSORS.slice(1);
   return `
-    <div class="spon-bar no-print-keep">
-      <span class="spon-bar-lbl">Supported by</span>
-      <div class="spon-logorow spon-logorow-bar">${sponsorLogoRow("bar")}</div>
+    <div class="spon-splitbar spon-splitbar-${variant}">
+      <div class="spon-side">${sponsorLogoLink(left)}</div>
+      <div class="spon-side">${right.map(sponsorLogoLink).join("")}</div>
     </div>`;
 }
 
@@ -91,6 +90,7 @@ function sponsorsContent() {
 function renderLanding() {
   return `
     <div class="landing-wrap">
+      ${sponsorSplitBar("hero")}
       <img src="images/logo.jpg" class="landing-logo-img" alt="CSBV Logo"/>
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
@@ -105,7 +105,6 @@ function renderLanding() {
 
       <div class="landing-sponsors">
         <div class="landing-spon-lbl">&#127775; Proudly Supported By</div>
-        <div class="spon-logorow spon-logorow-hero">${sponsorLogoRow("hero")}</div>
         <div class="landing-spon-prize">&#127942; Activewear prizes for all winners</div>
       </div>
 
@@ -1113,7 +1112,7 @@ function renderTournament() {
     content = sponsorsContent();
   }
 
-  return `${hdr}${sponsorTopBar()}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
+  return `${sponsorSplitBar("bar")}${hdr}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
 }
 
 /* ==========================================================================
