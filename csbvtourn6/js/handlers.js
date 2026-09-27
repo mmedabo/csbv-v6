@@ -137,6 +137,13 @@ window.confirmGenerate = () => {
         syncAuditLog();
       }
     }
+    // Offer to also wipe player rosters (clears any leftover data from a
+    // previous tournament so the new format starts from a clean slate).
+    if (confirm("Clear all player rosters too? (Recommended for a fresh tournament)\n\nOK = clear rosters   Cancel = keep player names")) {
+      state.teamsData = state.teamNames.map(pool =>
+        pool.map(name => ({ teamName: name, players: ["","",""] })));
+      syncTeamsData();
+    }
   }
   startTournament();
 };
@@ -341,9 +348,9 @@ window.saveDaySchedule = () => {
 };
 
 /* ==========================================================================
-   HASH ROUTING - deep-link straight to a tab (e.g. mmedabo.github.io/csbvtourn5-5/#rules)
+   HASH ROUTING - deep-link straight to a tab (e.g. mmedabo.github.io/csbvtourn6/#rules)
 ========================================================================== */
-const VALID_TABS = ["overview","pools","knockout","teams","schedule","history","rules"];
+const VALID_TABS = ["overview","pools","knockout","teams","schedule","history","rules","sponsors"];
 
 function applyHashRoute() {
   const h = (location.hash || "").replace(/^#/, "");

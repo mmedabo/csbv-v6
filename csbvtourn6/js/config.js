@@ -23,16 +23,16 @@ const ADMIN_PIN = "7890";   // <- change this to your own PIN
 /* ==========================================================================
    CONSTANTS
 ========================================================================== */
-const POOL_NAMES  = ["A","B","C","D"];
-const POOL_COLORS = ["#C8F04A","#FF6B3D","#4DD9E8","#B57BFF"];
-// Two courts per pool: pool A plays on A1/A2, pool B on B1/B2, etc.
-const COURT_NAMES = ["Court A1","Court A2","Court B1","Court B2",
-                     "Court C1","Court C2","Court D1","Court D2"];
+const POOL_NAMES  = ["A","B"];
+const POOL_COLORS = ["#C8F04A","#FF6B3D"];
+// Four courts per pool: pool A plays on A1-A4, pool B on B1-B4.
+const COURT_NAMES = ["Court A1","Court A2","Court A3","Court A4",
+                     "Court B1","Court B2","Court B3","Court B4"];
 const DEFAULT_TEAMS = [
-  ["Sand Sharks","Net Raiders","Spike Force","Block Party","Ace Squad"],
-  ["Beach Kings","Wave Riders","Dig Deep","Set & Match","Sun Spikers"],
-  ["Grit & Grin","High Flyers","Coast Crew","Serve Masters","Power Play"],
-  ["Iron Nets","Tide Turners","Sand Storm","Shore Things","Volley Vipers"],
+  ["Sand Sharks","Net Raiders","Spike Force","Block Party",
+   "Ace Squad","Beach Kings","Wave Riders","Dig Deep"],
+  ["Set & Match","Sun Spikers","Grit & Grin","High Flyers",
+   "Coast Crew","Serve Masters","Power Play","Iron Nets"],
 ];
 
 export { firebaseConfig, ADMIN_PIN, POOL_NAMES, POOL_COLORS, COURT_NAMES, DEFAULT_TEAMS,

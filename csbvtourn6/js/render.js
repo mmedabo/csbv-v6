@@ -3,22 +3,82 @@ import { esc, computeStandings } from "./helpers.js";
 import { state, isAdmin, isConfigured } from "./state.js";
 
 /* ==========================================================================
+   SPONSORS - CSBV 6.0 partners
+   Drop each logo file into images/ using the `logo` filename below and it
+   will replace the styled text fallback automatically.
+========================================================================== */
+const SPONSORS = [
+  { name:"KYDRA", logo:"sponsor-kydra.png", color:"#E8F5E4",
+    desc:"Craft activewear, designed in Singapore. Work · Training · Life.",
+    link:"kydra.co", href:"https://kydra.co" },
+  { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#4DD9E8",
+    desc:"Cold-water recovery & ice baths to keep players fresh all day.",
+    link:"", href:"" },
+  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#FF6B3D",
+    desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
+    link:"", href:"" },
+];
+
+function sponsorFooter() {
+  const names = SPONSORS.map(s =>
+    `<span class="spon-footer-name">${esc(s.name)}</span>`
+  ).join(`<span class="spon-footer-sep">&bull;</span>`);
+  return `
+    <div class="spon-footer">
+      <span class="spon-footer-lbl">Proudly supported by</span>
+      ${names}
+    </div>`;
+}
+
+function sponsorsContent() {
+  const cards = SPONSORS.map(s => {
+    const linkHTML = s.link
+      ? `<div class="spon-link"><a href="${esc(s.href)}" target="_blank" rel="noopener" style="color:${s.color}">${esc(s.link)} &rarr;</a></div>`
+      : "";
+    return `
+      <div class="spon-card" style="border-top:3px solid ${s.color}">
+        <div class="spon-logo-wrap">
+          <img src="images/${s.logo}" alt="${esc(s.name)}"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <div class="spon-logo-fallback" style="display:none;color:${s.color}">${esc(s.name)}</div>
+        </div>
+        <div class="spon-name">${esc(s.name)}</div>
+        <div class="spon-desc">${esc(s.desc)}</div>
+        ${linkHTML}
+      </div>`;
+  }).join("");
+
+  return `
+    <div class="spon-hero">
+      <div class="spon-eyebrow">CSBV 6.0 &bull; Proudly Supported By</div>
+      <div class="spon-title">Our Sponsors</div>
+      <div class="spon-tagline">Stronger Community &bull; Brighter Days</div>
+      <div class="spon-prize">&#127942; Activewear prizes for all winners</div>
+    </div>
+    <div class="spon-grid">${cards}</div>
+    <div class="spon-thanks">
+      A huge thank you to our partners for making CSBV 6.0 possible.<br/>
+      Please show them some love &mdash; on and off the sand. &#127958;
+    </div>`;
+}
+
+/* ==========================================================================
    RENDER - LANDING
 ========================================================================== */
 function renderLanding() {
   return `
     <div class="landing-wrap">
       <img src="images/logo.jpg" class="landing-logo-img" alt="CSBV Logo"/>
-      <img src="images/poster.jpg" class="landing-poster-img" alt="5.5 CSBV Tournament"/>
+      <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
         <div class="stamped-photo">
-          <img src="images/tourn55group.jpg" class="landing-group-img" alt="CSBV 5.5 — The whole crew"
+          <img src="images/tourn55group.jpg" class="landing-group-img" alt="CSBV 6.0 — The whole crew"
             onerror="this.closest('.landing-group-wrap').remove()"/>
           <img src="images/logo.jpg" class="photo-stamp" alt="CSBV" onerror="this.remove()"/>
         </div>
-        <div class="landing-group-cap">&#127958; CSBV 5.5 &mdash; The whole crew</div>
+        <div class="landing-group-cap">&#127958; CSBV 6.0 &mdash; The whole crew</div>
       </div>
-      <div class="landing-sub" style="margin-top:24px">4 Pools . 5 Teams per Pool . Pool -> QF -> SF -> Final</div>
+      <div class="landing-sub" style="margin-top:24px">3v3 &bull; 2 Pools . 8 Teams per Pool . Pool -> Semis -> Final</div>
       <div class="landing-cards">
 
         <div class="role-card viewer-card" onclick="enterViewer()">
@@ -70,12 +130,13 @@ function poolCardHTML(pi) {
     const expandKey = `${pi}-${s.name}`;
     const expanded  = !!state.expandedTeams[expandKey];
 
-    // Look up players from teamsData by matching team name
+    // Look up players from teamsData by matching team name (2 male + 1 female)
     const teamIdx   = state.pools.teams[pi].indexOf(s.name);
     const teamData  = (state.teamsData?.[pi]?.[teamIdx]) || {};
-    const male      = (teamData.players?.[0] || "").trim();
-    const female    = (teamData.players?.[1] || "").trim();
-    const hasPlayers = male || female;
+    const male1     = (teamData.players?.[0] || "").trim();
+    const male2     = (teamData.players?.[1] || "").trim();
+    const female    = (teamData.players?.[2] || "").trim();
+    const hasPlayers = male1 || male2 || female;
 
     const expandBtn = hasPlayers
       ? `<button class="team-expand-btn ${expanded?"open":""}" onclick="toggleTeamExpand('${expandKey}')" title="Show players">
@@ -88,7 +149,8 @@ function poolCardHTML(pi) {
         <td></td>
         <td colspan="4">
           <div class="team-player-list">
-            ${male   ? `<span class="player-chip male-chip">&#9794; ${esc(male)}</span>`   : ""}
+            ${male1  ? `<span class="player-chip male-chip">&#9794; ${esc(male1)}</span>`  : ""}
+            ${male2  ? `<span class="player-chip male-chip">&#9794; ${esc(male2)}</span>`  : ""}
             ${female ? `<span class="player-chip female-chip">&#9792; ${esc(female)}</span>` : ""}
           </div>
         </td>
@@ -101,7 +163,7 @@ function poolCardHTML(pi) {
         <div style="display:flex;align-items:center;gap:6px">
           ${expandBtn}
           <span>${esc(s.name)}</span>
-          ${rank<2?`<span class="qualify-pill">QF</span>`:""}
+          ${rank<2?`<span class="qualify-pill">SF</span>`:""}
         </div>
       </td>
       <td style="color:${color}">${s.W}</td>
@@ -119,16 +181,16 @@ function poolCardHTML(pi) {
 
   const matchRows = Object.entries(matchesByRound).map(([roundNum, roundMatches]) => {
     const byeTeam = roundMatches[0].byeTeam;
-    const byeName = teams[byeTeam] || `Team ${byeTeam+1}`;
+    const byeName = (byeTeam != null) ? (teams[byeTeam] || `Team ${byeTeam+1}`) : null;
 
     const matchBlocks = roundMatches.map((m, mi) => {
-      // Court per match: schedule override if set, else the pool's own courts.
-      // Orientation alternates each round (R1: c1,c2 / R2: c2,c1 / ...) so that
-      // every team plays exactly 2 of its 4 matches on each court.
+      // Court per match: schedule override if set, else one of the pool's 4 courts.
+      // The 4 matches of a round map to the pool's 4 courts (A1-A4 / B1-B4) so
+      // every match in a round can run at once.
       const sched = state.schedule[m.id] || {};
       const legacy = /^Court ([1-8])$/.exec(sched.court || "");
       const court = legacy ? COURT_NAMES[+legacy[1] - 1]
-                           : (sched.court || COURT_NAMES[pi*2 + ((mi + +roundNum + 1) % 2)]);
+                           : (sched.court || COURT_NAMES[pi*4 + (mi % 4)]);
       const t1=teams[m.t1], t2=teams[m.t2];
       const w1=m.status==="done"&&m.s1>m.s2, w2=m.status==="done"&&m.s2>m.s1;
       const isEd=state.editingMatch===m.id;
@@ -188,7 +250,7 @@ function poolCardHTML(pi) {
       <div class="round-block">
         <div class="round-header">
           <span class="round-label">Round ${roundNum}</span>
-          <span class="round-bye">&#128164; ${esc(byeName)} rests</span>
+          ${byeName ? `<span class="round-bye">&#128164; ${esc(byeName)} rests</span>` : ""}
         </div>
         ${matchBlocks}
       </div>`;
@@ -205,7 +267,7 @@ function poolCardHTML(pi) {
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:.72rem;color:var(--muted)">${done}/${matches.length} done</span>
-        <div class="net-badge">Courts ${POOL_NAMES[pi]}1, ${POOL_NAMES[pi]}2</div>
+        <div class="net-badge">Courts ${POOL_NAMES[pi]}1&ndash;${POOL_NAMES[pi]}4</div>
       </div>
     </div>
     ${isOpen ? `
@@ -222,7 +284,7 @@ function poolCardHTML(pi) {
    RENDER - KO CARD (shared, admin flag gates editing)
 ========================================================================== */
 function koCardHTML(m, stage, idx) {
-  const labels   = {qf:`QF ${idx+1}`,sf:`SF ${idx+1}`,third:"&#129353; 3rd Place",final:"&#127942; Final"};
+  const labels   = {sf:`SF ${idx+1}`,third:"&#129353; 3rd Place",final:"&#127942; Final"};
   const isFinal  = stage==="final";
   const isThird  = stage==="third";
   const tbd      = !m.t1 && !m.t2;
@@ -230,8 +292,7 @@ function koCardHTML(m, stage, idx) {
   const isEd     = state.koEditing===m.id;
   const admin    = isAdmin();
   const seedings = {
-    qf:["A1 vs D2","B1 vs C2","C1 vs B2","D1 vs A2"],
-    sf:["QF1W vs QF2W","QF3W vs QF4W"],
+    sf:["A1 vs B2","B1 vs A2"],
     third:["SF1L vs SF2L"],
     final:["SF1W vs SF2W"],
   };
@@ -343,7 +404,7 @@ function renderTournament() {
     <div class="hdr">
       <div>
         <img src="images/logo.jpg" class="hdr-logo-img" alt="CSBV"/>
-        <div class="hdr-sub">4 Pools . 5 Teams per Pool . Pool -> QF -> SF -> Final</div>
+        <div class="hdr-sub">CSBV 6.0 &bull; 3v3 . 2 Pools of 8 . Pool -> Semis -> Final</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
         <div class="hdr-stats">
@@ -367,6 +428,7 @@ function renderTournament() {
       <button class="tab ${tab==="knockout"?"on":""}" onclick="setTab('knockout')">Knockout</button>
       <button class="tab ${tab==="teams"?"on":""}" onclick="setTab('teams')">Teams</button>
       <button class="tab ${tab==='schedule'?'on':''}" onclick="setTab('schedule')">Schedule</button>
+      <button class="tab ${tab==="sponsors"?"on":""}" onclick="setTab('sponsors')">&#127775; Sponsors</button>
       <button class="tab ${tab==="history"?"on":""}" onclick="setTab('history')">History</button>
       ${admin ? `<button class="tab ${tab==="inventory"?"on":""}" onclick="setTab('inventory')">Inventory</button><button class="tab ${tab==="setup"?"on":""}" onclick="setTab('setup')">&#9881; Setup</button>` : ""}
     </div>`;
@@ -386,7 +448,7 @@ function renderTournament() {
       return `
         <div class="setup-card" style="border-top:3px solid ${POOL_COLORS[pi]}">
           <div class="setup-pool-title" style="color:${POOL_COLORS[pi]}">
-            Pool ${pn} <span style="color:#5A7A5E;font-size:.8rem">. Net ${pi+1}</span>
+            Pool ${pn} <span style="color:#5A7A5E;font-size:.8rem">. Courts ${pn}1&ndash;${pn}4</span>
           </div>
           ${inputs}
         </div>`;
@@ -419,11 +481,11 @@ function renderTournament() {
     } else {
       const poolCards = POOL_NAMES.map((_,pi)=>poolCardHTML(pi)).join("");
       const advBtn = admin && poolsDone && phase!=="knockout"
-        ? `<button class="btn btn-go btn-lg" onclick="advanceToKnockout()">! Advance Top 2 -> Quarterfinals</button>` : "";
+        ? `<button class="btn btn-go btn-lg" onclick="advanceToKnockout()">! Advance Top 2 -> Semifinals</button>` : "";
       const goKO = phase==="knockout"
         ? `<button class="btn btn-ghost" style="width:100%;margin-top:16px" onclick="setTab('knockout')">View Knockout Bracket -></button>` : "";
       const hint = admin && !poolsDone && phase!=="knockout"
-        ? `<p style="text-align:center;color:#5A7A5E;font-size:.82rem;margin-top:12px">Complete all pool matches to unlock Quarterfinals</p>` : "";
+        ? `<p style="text-align:center;color:#5A7A5E;font-size:.82rem;margin-top:12px">Complete all pool matches to unlock Semifinals</p>` : "";
 
       const poolFormatBanner = `
         <div class="format-banner">
@@ -453,8 +515,7 @@ function renderTournament() {
     if (!pools || phase!=="knockout") {
       // Show bracket skeleton — structure without team names
       const seedLabels = {
-        qf: ["A1 vs D2","B1 vs C2","C1 vs B2","D1 vs A2"],
-        sf: ["QF1 Winner vs QF2 Winner","QF3 Winner vs QF4 Winner"],
+        sf: ["Pool A #1 vs Pool B #2","Pool B #1 vs Pool A #2"],
         final: ["SF1 Winner vs SF2 Winner"],
       };
       function skeletonCard(label, stageLabel) {
@@ -471,13 +532,12 @@ function renderTournament() {
             <div class="ko-skeleton-seed">${label}</div>
           </div>`;
       }
-      const qfSkel   = seedLabels.qf.map((l,i) => skeletonCard(l, `QF ${i+1}`)).join("");
       const sfSkel   = seedLabels.sf.map((l,i) => skeletonCard(l, `SF ${i+1}`)).join("");
       const finSkel  = seedLabels.final.map((l,i) => skeletonCard(l, "&#127942; Final")).join("");
 
       content = `
         <div class="format-banner format-banner-ko">
-          <div class="format-banner-title">&#127942; Knockout Format &mdash; QF / SF / Final</div>
+          <div class="format-banner-title">&#127942; Knockout Format &mdash; Semis / Final</div>
           <div class="format-rules">
             <span class="format-rule"><span class="format-rule-num">21</span><span class="format-rule-lbl">points to win</span></span>
             <span class="format-sep">&#9679;</span>
@@ -488,10 +548,6 @@ function renderTournament() {
         </div>
         <div class="ko-notice">
           &#128274; Pool phase in progress &mdash; bracket seeds shown below. Teams locked in once all pool matches complete.
-        </div>
-        <div class="ko-section">
-          <div class="ko-title">Quarterfinals <div class="ko-title-bar"></div></div>
-          <div class="ko-grid ko-grid-4">${qfSkel}</div>
         </div>
         <div class="ko-section">
           <div class="ko-title">Semifinals <div class="ko-title-bar"></div></div>
@@ -526,9 +582,9 @@ function renderTournament() {
         </div>`;
       const champBanner = champion ? `
         <div class="winners-photo-wrap">
-          <img src="images/allwinner.jpg" class="winners-photo" alt="CSBV 5.5 Winners"
+          <img src="images/allwinner.jpg" class="winners-photo" alt="CSBV 6.0 Winners"
             onerror="this.closest('.winners-photo-wrap').remove()"/>
-          <div class="winners-photo-cap">&#127942; CSBV 5.5 Podium Finishers</div>
+          <div class="winners-photo-cap">&#127942; CSBV 6.0 Podium Finishers</div>
         </div>
         <div class="podium">
           ${podiumStep(2,"&#129352;","Runner-up",silver,"silver")}
@@ -541,14 +597,13 @@ function renderTournament() {
           ${podiumPhoto("third.jpg",bronze,"bronze")}
         </div>` : "";
 
-      const qfCards   = pools.koMatches.qf.map((m,i)=>koCardHTML(m,"qf",i)).join("");
       const sfCards   = pools.koMatches.sf.map((m,i)=>koCardHTML(m,"sf",i)).join("");
       const finalCard = pools.koMatches.final.map((m,i)=>koCardHTML(m,"final",i)).join("");
       const thirdCard = thirdM ? koCardHTML(thirdM,"third",0) : "";
 
       const koFormatBanner = `
         <div class="format-banner format-banner-ko">
-          <div class="format-banner-title">&#127942; Knockout Format &mdash; QF / SF / Final</div>
+          <div class="format-banner-title">&#127942; Knockout Format &mdash; Semis / Final</div>
           <div class="format-rules">
             <span class="format-rule"><span class="format-rule-num">21</span><span class="format-rule-lbl">points to win</span></span>
             <span class="format-sep">&#9679;</span>
@@ -562,10 +617,6 @@ function renderTournament() {
         ${koFormatBanner}
         ${champBanner}
         <div class="ko-section">
-          <div class="ko-title">Quarterfinals <div class="ko-title-bar"></div></div>
-          <div class="ko-grid ko-grid-4">${qfCards}</div>
-        </div>
-        <div class="ko-section">
           <div class="ko-title">Semifinals <div class="ko-title-bar"></div></div>
           <div class="ko-grid ko-grid-2">${sfCards}</div>
         </div>
@@ -576,11 +627,11 @@ function renderTournament() {
         ${champion ? `
         <div class="group-photo-wrap">
           <div class="stamped-photo">
-            <img src="images/tourn55group.jpg" class="group-photo" alt="CSBV 5.5 — Everyone"
+            <img src="images/tourn55group.jpg" class="group-photo" alt="CSBV 6.0 — Everyone"
               onerror="if(this.dataset.f){this.closest('.group-photo-wrap').remove()}else{this.dataset.f=1;this.src='images/tourn55group.png'}"/>
             <img src="images/logo.jpg" class="photo-stamp" alt="CSBV" onerror="this.remove()"/>
           </div>
-          <div class="group-photo-cap">&#127958; CSBV 5.5 &mdash; Till the next one!</div>
+          <div class="group-photo-cap">&#127958; CSBV 6.0 &mdash; Till the next one!</div>
         </div>` : ""}`;
     }
   }
@@ -595,10 +646,11 @@ function renderTournament() {
         const teamLabel = pools ? pools.teams[pi][ti] : (state.teamNames[pi][ti] || `Team ${ti+1}`);
 
         if (admin) {
-          // Editable: team name (propagates to pool) + male/female players
+          // Editable: team name (propagates to pool) + 2 male + 1 female players
           const playerInputs = [
-            { idx:0, gender:"male",   label:"M Male",   icon:"[M]", color:"#4DD9E8" },
-            { idx:1, gender:"female", label:"F Female", icon:"[F]", color:"#B57BFF" },
+            { idx:0, gender:"male",   label:"M Male 1",  icon:"[M]", color:"#4DD9E8" },
+            { idx:1, gender:"male",   label:"M Male 2",  icon:"[M]", color:"#4DD9E8" },
+            { idx:2, gender:"female", label:"F Female",  icon:"[F]", color:"#B57BFF" },
           ].map(({idx,label,icon,color}) => `
             <div class="player-row">
               <span class="gender-badge" style="background:${color}18;color:${color};border:1px solid ${color}44">${label}</span>
@@ -621,19 +673,20 @@ function renderTournament() {
               <div class="player-list">${playerInputs}</div>
             </div>`;
         } else {
-          // View only
-          const male   = (team.players||[])[0]?.trim() || "";
-          const female = (team.players||[])[1]?.trim() || "";
-          const complete = male && female;
-          const playerList = `
+          // View only (2 male + 1 female)
+          const male1  = (team.players||[])[0]?.trim() || "";
+          const male2  = (team.players||[])[1]?.trim() || "";
+          const female = (team.players||[])[2]?.trim() || "";
+          const complete = male1 && male2 && female;
+          const viewRow = (label, bg, col, name) => `
             <div class="player-view-row">
-              <span class="gender-badge" style="background:#4DD9E818;color:#4DD9E8;border:1px solid #4DD9E844">M Male</span>
-              <span style="${!male?"color:#5A7A5E;font-style:italic":""}">${esc(male)||"Not listed"}</span>
-            </div>
-            <div class="player-view-row" style="border-bottom:none">
-              <span class="gender-badge" style="background:#B57BFF18;color:#B57BFF;border:1px solid #B57BFF44">F Female</span>
-              <span style="${!female?"color:#5A7A5E;font-style:italic":""}">${esc(female)||"Not listed"}</span>
-            </div>
+              <span class="gender-badge" style="background:${bg};color:${col};border:1px solid ${col}44">${label}</span>
+              <span style="${!name?"color:#5A7A5E;font-style:italic":""}">${esc(name)||"Not listed"}</span>
+            </div>`;
+          const playerList = `
+            ${viewRow("M Male 1","#4DD9E818","#4DD9E8",male1)}
+            ${viewRow("M Male 2","#4DD9E818","#4DD9E8",male2)}
+            ${viewRow("F Female","#B57BFF18","#B57BFF",female)}
             ${!complete?`<div style="font-size:.7rem;color:#FF6B3D;margin-top:6px">(!) Roster incomplete</div>`:""}
           `;
 
@@ -651,7 +704,7 @@ function renderTournament() {
       return `
         <div class="teams-pool-section">
           <div class="teams-pool-title" style="color:${color}">
-            Pool ${pn} <span style="color:#5A7A5E;font-weight:400;font-size:.85rem">. Net ${pi+1}</span>
+            Pool ${pn} <span style="color:#5A7A5E;font-weight:400;font-size:.85rem">. Courts ${pn}1&ndash;${pn}4</span>
           </div>
           <div class="teams-grid">${teamRows}</div>
         </div>`;
@@ -662,7 +715,7 @@ function renderTournament() {
 
     content = `
       <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <span class="tag">${admin ? "Edit team names . 1 male + 1 female per team . Changes sync everywhere" : "Team rosters . Mixed pairs format"}</span>
+        <span class="tag">${admin ? "Edit team names . 2 male + 1 female per team . Changes sync everywhere" : "Team rosters . 3v3 mixed format (2M + 1F)"}</span>
         ${admin ? `<span style="font-size:.75rem;color:#5A7A5E">Changes sync live to all viewers</span>` : ""}
       </div>
       ${teamCards}
@@ -785,7 +838,7 @@ function renderTournament() {
         const icon  = isReset ? "<>" : isPool ? "&#127952;" : "&#127942;";
         const badge = isPool
           ? `<span class="hist-badge" style="background:${color}22;color:${color};border:1px solid ${color}55">Pool ${e.pool}</span>`
-          : `<span class="hist-badge" style="background:var(--gold)22;color:var(--gold);border:1px solid var(--gold)55">${{qf:"QF",sf:"SF",final:"Final"}[e.stage]||e.stage}</span>`;
+          : `<span class="hist-badge" style="background:var(--gold)22;color:var(--gold);border:1px solid var(--gold)55">${{sf:"SF",third:"3rd",final:"Final"}[e.stage]||e.stage}</span>`;
         const winner = isScore && !isReset
           ? (e.s1 > e.s2 ? e.t1 : e.t2) : null;
         return `
@@ -1025,7 +1078,12 @@ function renderTournament() {
     content = rulesContent();
   }
 
-  return `${hdr}${tabs}<div class="content">${content}</div>`;
+  /* -- SPONSORS TAB -- */
+  if (tab==="sponsors") {
+    content = sponsorsContent();
+  }
+
+  return `${hdr}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
 }
 
 /* ==========================================================================
@@ -1056,15 +1114,15 @@ function render() {
 }
 
 /* ==========================================================================
-   RULES TAB - animated SVG explainers (CSBV 5.5 "Rules in Motion")
+   RULES TAB - animated SVG explainers (CSBV 6.0 "Rules in Motion")
 ========================================================================== */
 function rulesContent() {
   return `
   <div class="rules-wrap">
     <div class="rules-intro">
-      <strong style="color:#C8F04A">CSBV 5.5 &bull; Rules in Motion.</strong>
+      <strong style="color:#C8F04A">CSBV 6.0 &bull; Rules in Motion.</strong>
       Each card below is an animated explainer of a core tournament rule.
-      Share this page directly: <code>mmedabo.github.io/csbvtourn5-5/#rules</code>
+      Share this page directly: <code>mmedabo.github.io/csbvtourn6/#rules</code>
     </div>
     <div class="rules-grid">
 
@@ -1454,9 +1512,9 @@ function rulesContent() {
     </svg>
     </div>
 
-    <!-- 12. SERVE ORDER (alternate) -->
+    <!-- 12. SERVE ORDER (rotation) -->
     <div class="rules-card">
-    <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Partners must alternate serving; the player who did not serve last serves next">
+    <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Teams keep a fixed serving order; the next player in the rotation serves at each side-out">
       <style>
         .r12-a{animation:r12a 4s infinite}@keyframes r12a{0%,40%{opacity:1}50%,100%{opacity:0}}
         .r12-b{animation:r12b 4s infinite}@keyframes r12b{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
@@ -1479,8 +1537,8 @@ function rulesContent() {
       <path d="M178,108 Q200,90 222,108" fill="none" stroke="#9CC3BD" stroke-width="2" stroke-dasharray="4 5"/>
       <polygon points="222,108 213,103 216,113" fill="#9CC3BD"/>
       <polygon points="178,108 187,103 184,113" fill="#9CC3BD"/>
-      <text x="200" y="282" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-size="15" fill="#F4E9C8" letter-spacing="1">PARTNERS TAKE TURNS SERVING</text>
-      <text x="200" y="306" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#9CC3BD">Win the serve back? The other partner serves</text>
+      <text x="200" y="282" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-size="15" fill="#F4E9C8" letter-spacing="1">KEEP A FIXED SERVE ROTATION</text>
+      <text x="200" y="306" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#9CC3BD">Win the serve back? The next player in order serves</text>
     </svg>
     </div>
 

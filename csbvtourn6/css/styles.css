@@ -548,3 +548,41 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .rules-card svg{width:100%;height:auto;display:block;border-radius:14px;
   box-shadow:0 10px 24px rgba(0,0,0,.35);}
 @media (prefers-reduced-motion: reduce){ .rules-card svg *{animation:none !important;} }
+
+/* ==========================================================================
+   SPONSORS TAB + FOOTER STRIP (CSBV 6.0)
+========================================================================== */
+.spon-hero{text-align:center;padding:20px 16px 8px;}
+.spon-eyebrow{font-family:'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;
+  font-size:.78rem;color:var(--muted);}
+.spon-title{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  font-size:1.5rem;color:var(--accent);margin-top:4px;}
+.spon-tagline{font-size:.9rem;color:var(--dim);margin-top:6px;font-style:italic;}
+.spon-prize{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 16px;
+  background:var(--gold)18;border:1px solid var(--gold)55;border-radius:999px;
+  color:var(--gold);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;
+  text-transform:uppercase;font-size:.85rem;font-weight:600;}
+.spon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px;}
+.spon-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;
+  transition:border-color .2s,transform .2s;}
+.spon-card:hover{transform:translateY(-2px);}
+.spon-logo-wrap{width:100%;height:96px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;}
+.spon-logo-wrap img{max-width:100%;max-height:96px;object-fit:contain;}
+.spon-logo-fallback{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;font-size:1.4rem;line-height:1.1;padding:0 8px;}
+.spon-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;
+  font-size:1.15rem;color:var(--text);}
+.spon-desc{font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:6px;}
+.spon-link{margin-top:12px;font-size:.8rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+.spon-thanks{text-align:center;color:var(--muted);font-size:.82rem;margin-top:24px;line-height:1.6;}
+
+/* footer strip shown under every view */
+.spon-footer{margin:26px 0 6px;padding:14px 16px;border-top:1px solid var(--border);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;text-align:center;}
+.spon-footer-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;
+  font-size:.72rem;color:var(--muted);}
+.spon-footer-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;
+  font-size:.9rem;color:var(--dim);}
+.spon-footer-sep{color:var(--border);}
