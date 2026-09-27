@@ -30,6 +30,24 @@ function sponsorFooter() {
     </div>`;
 }
 
+// Horizontal row of clickable sponsor logos. variant: "bar" (compact, in-page
+// top strip) or "hero" (large, landing page).
+function sponsorLogoRow(variant) {
+  return SPONSORS.map(s => `
+    <a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">
+      <img src="images/${s.logo}" alt="${esc(s.name)}"/>
+    </a>`).join("");
+}
+
+// Slim "supported by" logo strip shown at the top of every tournament view.
+function sponsorTopBar() {
+  return `
+    <div class="spon-bar no-print-keep">
+      <span class="spon-bar-lbl">Supported by</span>
+      <div class="spon-logorow spon-logorow-bar">${sponsorLogoRow("bar")}</div>
+    </div>`;
+}
+
 function sponsorsContent() {
   const cards = SPONSORS.map(s => {
     const webLink = s.link
@@ -84,6 +102,13 @@ function renderLanding() {
         <div class="landing-group-cap">&#127958; CSBV 6.0 &mdash; The whole crew</div>
       </div>
       <div class="landing-sub" style="margin-top:24px">3v3 &bull; 2 Pools . 8 Teams per Pool . Pool -> Semis -> Final</div>
+
+      <div class="landing-sponsors">
+        <div class="landing-spon-lbl">&#127775; Proudly Supported By</div>
+        <div class="spon-logorow spon-logorow-hero">${sponsorLogoRow("hero")}</div>
+        <div class="landing-spon-prize">&#127942; Activewear prizes for all winners</div>
+      </div>
+
       <div class="landing-cards">
 
         <div class="role-card viewer-card" onclick="enterViewer()">
@@ -1088,7 +1113,7 @@ function renderTournament() {
     content = sponsorsContent();
   }
 
-  return `${hdr}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
+  return `${hdr}${sponsorTopBar()}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
 }
 
 /* ==========================================================================
