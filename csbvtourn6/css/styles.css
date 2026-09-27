@@ -593,18 +593,17 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   font-size:.9rem;color:var(--dim);}
 .spon-footer-sep{color:var(--border);}
 
-/* ---- Sponsor split logo bar (1 logo left, 2 right) ---- */
-.spon-splitbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:8px 16px;width:100%;box-sizing:border-box;}
-.spon-splitbar-bar{background:#000;border-bottom:1px solid var(--border);}
-.spon-splitbar-hero{padding:14px 4px 6px;}
-.spon-side{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.spon-side:last-child{justify-content:flex-end;}
+/* ---- Sponsor logo bar (all three, centered with equal gaps, wraps if tight) ---- */
+.spon-splitbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 34px;
+  width:100%;box-sizing:border-box;}
+.spon-splitbar-bar{background:#000;border-bottom:1px solid var(--border);padding:9px 16px;}
+/* stretch across the .landing-wrap side padding so logos aren't squeezed */
+.spon-splitbar-hero{width:auto;align-self:stretch;margin:0 -16px;padding:16px 8px 8px;}
 .spon-logo-link{display:inline-flex;align-items:center;opacity:.94;transition:opacity .18s,transform .18s;}
 .spon-logo-link:hover{opacity:1;transform:translateY(-1px);}
-.spon-splitbar img{width:auto;object-fit:contain;border-radius:6px;display:block;}
-.spon-splitbar-bar img{height:30px;max-height:30px;}
-.spon-splitbar-hero img{height:54px;max-height:54px;}
+.spon-splitbar img{width:auto;max-width:100%;object-fit:contain;border-radius:6px;display:block;}
+.spon-splitbar-bar img{height:34px;max-height:34px;}
+.spon-splitbar-hero img{height:66px;max-height:66px;}
 
 .landing-sponsors{margin:22px auto 6px;text-align:center;display:flex;flex-direction:column;
   align-items:center;gap:10px;}
@@ -615,7 +614,9 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;
   font-size:.82rem;font-weight:600;}
 @media (max-width:480px){
-  .spon-splitbar-hero img{height:40px;max-height:40px;}
-  .spon-splitbar-bar img{height:24px;max-height:24px;}
-  .spon-side{gap:10px;}
+  .spon-splitbar{gap:12px 18px;}
+  .spon-splitbar-bar{padding:8px 10px;}
+  .spon-splitbar-hero{padding:16px 2px 8px;}
+  .spon-splitbar-hero img{height:46px;max-height:46px;}
+  .spon-splitbar-bar img{height:28px;max-height:28px;}
 }
