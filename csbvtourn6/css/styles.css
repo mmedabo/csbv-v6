@@ -589,3 +589,29 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .spon-footer-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;
   font-size:.9rem;color:var(--dim);}
 .spon-footer-sep{color:var(--border);}
+
+/* ---- Sponsor logo strips (top bar on every view + landing hero) ---- */
+.spon-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;
+  padding:8px 16px;margin-bottom:6px;background:var(--surface);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.spon-bar-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;
+  font-size:.68rem;color:var(--muted);}
+.spon-logorow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;}
+.spon-logo-link{display:inline-flex;align-items:center;opacity:.92;transition:opacity .18s,transform .18s;}
+.spon-logo-link:hover{opacity:1;transform:translateY(-1px);}
+.spon-logorow img{width:auto;object-fit:contain;border-radius:6px;display:block;}
+.spon-logorow-bar img{height:30px;max-height:30px;}
+.spon-logorow-hero img{height:64px;max-height:64px;}
+
+.landing-sponsors{margin:28px auto 8px;text-align:center;display:flex;flex-direction:column;
+  align-items:center;gap:14px;}
+.landing-spon-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;
+  font-size:.8rem;color:var(--dim);}
+.landing-spon-prize{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;
+  background:var(--gold)18;border:1px solid var(--gold)55;border-radius:999px;color:var(--gold);
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;
+  font-size:.82rem;font-weight:600;}
+@media (max-width:480px){
+  .spon-logorow-hero img{height:48px;max-height:48px;}
+  .spon-logorow-bar img{height:26px;max-height:26px;}
+}
