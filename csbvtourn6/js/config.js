@@ -5,7 +5,7 @@ import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebase
    FIREBASE CONFIG - already filled in
 ------------------------------------------------------------------------- */
 const firebaseConfig = {
-  apiKey: "AIzaSyDeTTBUW3r5A7c554MwXntQ9zL2eg07CW4",
+  apiKey: "",
   authDomain: "csbv-tourn-2x2.firebaseapp.com",
   databaseURL: "https://csbv-tourn-2x2-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "csbv-tourn-2x2",
