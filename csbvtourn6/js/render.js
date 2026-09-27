@@ -13,7 +13,7 @@ const SPONSORS = [
     link:"kydra.co", href:"https://kydra.co" },
   { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#4DD9E8",
     desc:"Cold-water recovery & ice baths to keep players fresh all day.",
-    link:"", href:"" },
+    link:"theicebathclubs.com", href:"https://www.theicebathclubs.com" },
   { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#FF6B3D",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"", href:"" },
