@@ -1,4 +1,4 @@
-import { firebaseConfig, ADMIN_PIN, POOL_NAMES, POOL_COLORS, DEFAULT_TEAMS,
+import { firebaseConfig, ADMIN_PIN, DB_NS, POOL_NAMES, POOL_COLORS, DEFAULT_TEAMS,
          initializeApp, getDatabase, ref, set, onValue } from "./config.js";
 
 /* ==========================================================================
@@ -11,12 +11,15 @@ if (isConfigured) {
   db = getDatabase(app);
 }
 
-function syncToFirebase(data) { if (db) set(ref(db,"tournament"), data); }
-function syncTeamsData() { if (db) set(ref(db,"teamsData"), state.teamsData); }
-function syncSchedule()  { if (db) set(ref(db,"schedule"),  state.schedule); }
-function syncDaySchedule() { if (db) set(ref(db,"daySchedule"), state.daySchedule); }
-function syncInventory() { if (db) set(ref(db,"inventory"), state.inventory); }
-function syncAuditLog() { if (db) set(ref(db,"auditLog"), state.auditLog); }
+// All V6 data lives under the DB_NS root, isolated from the old 5.5 data.
+const dbRef = (path) => ref(db, DB_NS ? `${DB_NS}/${path}` : path);
+
+function syncToFirebase(data) { if (db) set(dbRef("tournament"), data); }
+function syncTeamsData() { if (db) set(dbRef("teamsData"), state.teamsData); }
+function syncSchedule()  { if (db) set(dbRef("schedule"),  state.schedule); }
+function syncDaySchedule() { if (db) set(dbRef("daySchedule"), state.daySchedule); }
+function syncInventory() { if (db) set(dbRef("inventory"), state.inventory); }
+function syncAuditLog() { if (db) set(dbRef("auditLog"), state.auditLog); }
 
 function addAuditEntry(entry) {
   state.auditLog = [{ ...entry, ts: Date.now() }, ...state.auditLog].slice(0, 200);
@@ -33,7 +36,7 @@ function startFirebaseListener() {
     if (tournamentLoaded && teamsDataLoaded) { if (typeof window.__render === 'function') window.__render(); }
   }
 
-  onValue(ref(db,"tournament"), snap => {
+  onValue(dbRef("tournament"), snap => {
     const data = snap.val();
     // Preserve mid-edit values
     if (state.editingMatch) {
@@ -60,27 +63,27 @@ function startFirebaseListener() {
     tryRender();
   });
 
-  onValue(ref(db,"schedule"), snap => {
+  onValue(dbRef("schedule"), snap => {
     const data = snap.val();
     if (data) state.schedule = data;
   });
 
-  onValue(ref(db,"auditLog"), snap => {
+  onValue(dbRef("auditLog"), snap => {
     const data = snap.val();
     if (data) state.auditLog = data;
   });
 
-  onValue(ref(db,"inventory"), snap => {
+  onValue(dbRef("inventory"), snap => {
     const data = snap.val();
     if (data) state.inventory = data;
   });
 
-  onValue(ref(db,"daySchedule"), snap => {
+  onValue(dbRef("daySchedule"), snap => {
     const data = snap.val();
     if (data) state.daySchedule = data;
   });
 
-  onValue(ref(db,"teamsData"), snap => {
+  onValue(dbRef("teamsData"), snap => {
     const data = snap.val();
     if (data) {
       state.teamsData = data;
@@ -119,8 +122,9 @@ let state = {
   koEditing: null,
   koScores: { s1:"", s2:"" },
   // teamsData: { pool: [ { teamName, players: [str] } ] }
+  // 3 players per team: [male, male, female]
   teamsData: POOL_NAMES.map((_,pi) =>
-    DEFAULT_TEAMS[pi].map(name => ({ teamName: name, players: ["",""] }))
+    DEFAULT_TEAMS[pi].map(name => ({ teamName: name, players: ["","",""] }))
   ),
   editingTeamsData: false,
   schedule: {},
@@ -129,9 +133,8 @@ let state = {
     { id:"ds2",  time:"1:40-1:50", activity:"Tournament briefing" },
     { id:"ds3",  time:"1:50-2:00", activity:"Warm-up / stretching" },
     { id:"ds4",  time:"2:00-2:05", activity:"Group photo &#128247;" },
-    { id:"ds5",  time:"2:05-3:45", activity:"Group stage" },
-    { id:"ds6",  time:"3:45-4:00", activity:"Score tally + hydration break" },
-    { id:"ds7",  time:"4:00-4:30", activity:"Quarter-finals" },
+    { id:"ds5",  time:"2:05-4:15", activity:"Pool stage (2 pools of 8 &middot; 7 games each)" },
+    { id:"ds6",  time:"4:15-4:30", activity:"Score tally + hydration break" },
     { id:"ds8",  time:"4:30-4:45", activity:"Drinks / rest break &#127862;" },
     { id:"ds9",  time:"4:45-5:15", activity:"Semi-finals" },
     { id:"ds10", time:"5:15-5:30", activity:"Finalists rest / hydration break &#127862;" },
@@ -140,7 +143,7 @@ let state = {
     { id:"ds13", time:"6:10-6:20", activity:"Champions photos / closing &#128247;" },
   ],
   expandedTeams: {}, // { 'poolIdx-teamName': true } — UI only, not synced
-  expandedPools: { 0:true, 1:false, 2:false, 3:false }, // only Pool A open by default
+  expandedPools: { 0:true, 1:false }, // only Pool A open by default
   auditLog: [],
   inventory: {
     equipment: [
@@ -149,10 +152,17 @@ let state = {
       { id:"eq3", name:"Ball 3", category:"ball", assignedTo:"", returned:false, notes:"" },
       { id:"eq4", name:"Ball 4", category:"ball", assignedTo:"", returned:false, notes:"" },
       { id:"eq5", name:"Ball 5", category:"ball", assignedTo:"", returned:false, notes:"" },
-      { id:"eq6", name:"Net 1",  category:"net",  assignedTo:"", returned:false, notes:"" },
-      { id:"eq7", name:"Net 2",  category:"net",  assignedTo:"", returned:false, notes:"" },
-      { id:"eq8", name:"Net 3",  category:"net",  assignedTo:"", returned:false, notes:"" },
-      { id:"eq9", name:"Net 4",  category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq6", name:"Ball 6", category:"ball", assignedTo:"", returned:false, notes:"" },
+      { id:"eq7", name:"Ball 7", category:"ball", assignedTo:"", returned:false, notes:"" },
+      { id:"eq8", name:"Ball 8", category:"ball", assignedTo:"", returned:false, notes:"" },
+      { id:"eq9",  name:"Net 1", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq10", name:"Net 2", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq11", name:"Net 3", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq12", name:"Net 4", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq13", name:"Net 5", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq14", name:"Net 6", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq15", name:"Net 7", category:"net",  assignedTo:"", returned:false, notes:"" },
+      { id:"eq16", name:"Net 8", category:"net",  assignedTo:"", returned:false, notes:"" },
     ],
     drinks: [
       { id:"dr1", name:"Water",        qty:0, unit:"bottles", notes:"" },

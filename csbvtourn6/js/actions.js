@@ -10,7 +10,6 @@ function startTournament() {
   const teams = state.teamNames.map(p=>p.map(t=>t.trim()||"TBD"));
   const matches = teams.map((p,pi)=>makePoolMatches(pi,p));
   const koMatches = {
-    qf: Array(4).fill(null).map((_,i)=>({id:`qf${i}`,t1:null,t2:null,s1:null,s2:null,status:"pending"})),
     sf: Array(2).fill(null).map((_,i)=>({id:`sf${i}`,t1:null,t2:null,s1:null,s2:null,status:"pending"})),
     third: [{id:"third",t1:null,t2:null,s1:null,s2:null,status:"pending"}],
     final: [{id:"final",t1:null,t2:null,s1:null,s2:null,status:"pending"}],
@@ -59,15 +58,14 @@ function resetPoolMatch(poolIdx, matchId) {
 }
 
 function advanceToKnockout() {
-  const QF_SEEDS = [
-    {p1:0,r1:0,p2:3,r2:1},{p1:1,r1:0,p2:2,r2:1},
-    {p1:2,r1:0,p2:1,r2:1},{p1:3,r1:0,p2:0,r2:1},
-  ];
+  // Top 2 from each pool, crossover into the semis:
+  //   SF1 = Pool A #1 vs Pool B #2
+  //   SF2 = Pool B #1 vs Pool A #2
   const qual = POOL_NAMES.map((_,pi)=>computeStandings(state.pools.teams[pi], state.pools.matches[pi]).slice(0,2));
-  state.pools.koMatches.qf = QF_SEEDS.map((s,i)=>({
-    id:`qf${i}`, t1:qual[s.p1]?.[s.r1]?.name||"TBD", t2:qual[s.p2]?.[s.r2]?.name||"TBD",
-    s1:null, s2:null, status:"pending",
-  }));
+  state.pools.koMatches.sf = [
+    { id:"sf0", t1:qual[0]?.[0]?.name||"TBD", t2:qual[1]?.[1]?.name||"TBD", s1:null, s2:null, status:"pending" },
+    { id:"sf1", t1:qual[1]?.[0]?.name||"TBD", t2:qual[0]?.[1]?.name||"TBD", s1:null, s2:null, status:"pending" },
+  ];
   state.phase = "knockout"; state.tab = "knockout";
   syncToFirebase({ pools: state.pools, phase: state.phase });
   render();
@@ -85,16 +83,6 @@ function saveKOScore(stage, id, s1, s2) {
   state.pools.koMatches[stage] = state.pools.koMatches[stage].map(m=>
     m.id!==id ? m : {...m, s1, s2, status:"done"}
   );
-  if (stage==="qf") {
-    const done = state.pools.koMatches.qf.filter(m=>m.status==="done");
-    if (done.length===4) {
-      const w = done.map(m=>m.s1>m.s2?m.t1:m.t2);
-      state.pools.koMatches.sf = [
-        {id:"sf0",t1:w[0],t2:w[1],s1:null,s2:null,status:"pending"},
-        {id:"sf1",t1:w[2],t2:w[3],s1:null,s2:null,status:"pending"},
-      ];
-    }
-  }
   if (stage==="sf") {
     const done = state.pools.koMatches.sf.filter(m=>m.status==="done");
     if (done.length===2) {
@@ -106,7 +94,7 @@ function saveKOScore(stage, id, s1, s2) {
     }
   }
   const scored = state.pools.koMatches[stage].find(m=>m.id===id);
-  const stageLabel = {qf:"Quarter-Final",sf:"Semi-Final",third:"3rd-Place",final:"Final"}[stage] || stage;
+  const stageLabel = {sf:"Semi-Final",third:"3rd-Place",final:"Final"}[stage] || stage;
   addAuditEntry({ type:"ko", action:"score", stage,
     matchId: id, t1: scored.t1, t2: scored.t2, s1, s2,
     label:`${stageLabel}: ${scored.t1} ${s1}-${s2} ${scored.t2}` });
@@ -117,7 +105,7 @@ function saveKOScore(stage, id, s1, s2) {
 
 function resetKOMatch(stage, id) {
   const match = state.pools.koMatches[stage].find(m=>m.id===id);
-  const stageLabel = {qf:"Quarter-Final",sf:"Semi-Final",third:"3rd-Place",final:"Final"}[stage] || stage;
+  const stageLabel = {sf:"Semi-Final",third:"3rd-Place",final:"Final"}[stage] || stage;
   state.pools.koMatches[stage] = state.pools.koMatches[stage].map(m=>
     m.id!==id ? m : {...m, s1:null, s2:null, status:"pending"}
   );

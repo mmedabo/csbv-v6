@@ -4,33 +4,38 @@ import { POOL_NAMES } from "./config.js";
    HELPERS
 ========================================================================== */
 function makePoolMatches(poolIdx, teams) {
-  // Verified optimal 5-team schedule. Min gap = 2 for every team (proven mathematical maximum).
-  // Structured as 5 rounds of 2 matches each - one team gets a full round bye per round.
-  // Round 1: T0 rests | Round 2: T1 rests | Round 3: T4 rests | Round 4: T3 rests | Round 5: T2 rests
-  const ROUNDS = [
-    { bye:0, matches:[[2,4],[1,3]] },
-    { bye:1, matches:[[0,2],[3,4]] },
-    { bye:4, matches:[[0,1],[2,3]] },
-    { bye:3, matches:[[0,4],[1,2]] },
-    { bye:2, matches:[[0,3],[1,4]] },
-  ];
+  // Single round-robin via the circle method: every team plays every other team
+  // exactly once. For 8 teams this is 7 rounds of 4 matches (7 games per team,
+  // no byes). Works for any even team count; an odd count gets a rotating bye.
+  const arr = teams.map((_, i) => i);
+  if (arr.length % 2 === 1) arr.push(-1); // -1 marks a bye slot for odd counts
+  const rounds = arr.length - 1;
+  const half   = arr.length / 2;
+  let rot = arr.slice();
   const result = [];
   let idx = 0;
-  ROUNDS.forEach((round, ri) => {
-    round.matches.forEach(([t1,t2]) => {
+  for (let r = 0; r < rounds; r++) {
+    let byeTeam = null;
+    for (let i = 0; i < half; i++) {
+      const a = rot[i], b = rot[rot.length - 1 - i];
+      if (a === -1 || b === -1) { byeTeam = a === -1 ? b : a; continue; }
       result.push({
         id: `P${poolIdx}-${idx}`,
         pool: poolIdx,
-        t1, t2,
+        t1: a, t2: b,
         s1: null, s2: null,
         status: "pending",
         slot: idx + 1,
-        round: ri + 1,
-        byeTeam: round.bye,
+        round: r + 1,
+        byeTeam,
       });
       idx++;
-    });
-  });
+    }
+    // Fill the round's byeTeam onto its matches (known only after the inner loop)
+    result.filter(m => m.round === r + 1).forEach(m => { m.byeTeam = byeTeam; });
+    // Rotate: keep the first team fixed, rotate the rest clockwise.
+    rot = [rot[0], rot[rot.length - 1], ...rot.slice(1, rot.length - 1)];
+  }
   return result;
 }
 
