@@ -35,15 +35,12 @@ function sponsorLogoLink(s) {
     <img src="images/${s.logo}" alt="${esc(s.name)}"/></a>`;
 }
 
-// Sponsor logo bar pinned at the very top: one logo on the left, two on the
-// right. variant "bar" (compact, tournament views) or "hero" (large, landing).
+// Sponsor logo bar pinned at the very top: all three logos evenly spaced.
+// variant "bar" (compact, tournament views) or "hero" (large, landing).
 function sponsorSplitBar(variant) {
-  const left  = SPONSORS[0];
-  const right = SPONSORS.slice(1);
   return `
     <div class="spon-splitbar spon-splitbar-${variant}">
-      <div class="spon-side">${sponsorLogoLink(left)}</div>
-      <div class="spon-side">${right.map(sponsorLogoLink).join("")}</div>
+      ${SPONSORS.map(sponsorLogoLink).join("")}
     </div>`;
 }
 
