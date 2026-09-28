@@ -89,10 +89,6 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .hdr{padding:16px 0 16px;display:flex;align-items:flex-start;justify-content:space-between;
   border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
 .hdr-logo-img{height:60px;width:auto;object-fit:contain;}
-/* CSBV logo variant swap by theme */
-.csbv-logo-dark{display:none;}
-:root[data-theme="dark"] .csbv-logo-light{display:none;}
-:root[data-theme="dark"] .csbv-logo-dark{display:inline-block;}
 .hdr-sub{font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
 .hdr-stats{display:flex;gap:18px;text-align:right;}
 .hdr-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);line-height:1;}
