@@ -207,8 +207,9 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .winners-photo-wrap{max-width:560px;margin:0 auto 16px;text-align:center;}
 .winners-photo{width:100%;display:block;border-radius:16px;border:1px solid var(--gold);
   box-shadow:0 0 30px -10px var(--gold);}
-.winners-photo-cap{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:2px;
+.winners-photo-cap,.winners-cap{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:2px;
   text-transform:uppercase;color:var(--gold);margin-top:8px;}
+.winners-cap{text-align:center;margin-bottom:8px;}
 
 /* ── LOGO STAMP overlay on a photo ── */
 .stamped-photo{position:relative;display:block;line-height:0;}
@@ -584,19 +585,12 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .spon-links a:hover{opacity:1;text-decoration:underline;}
 .spon-thanks{text-align:center;color:var(--muted);font-size:.82rem;margin-top:24px;line-height:1.6;}
 
-/* footer strip shown under every view */
-.spon-footer{margin:26px 0 6px;padding:14px 16px;border-top:1px solid var(--border);
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;text-align:center;}
-.spon-footer-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;
-  font-size:.72rem;color:var(--muted);}
-.spon-footer-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;
-  font-size:.9rem;color:var(--dim);}
-.spon-footer-sep{color:var(--border);}
-
-/* ---- Sponsor logo bar (all three, centered with equal gaps, wraps if tight) ---- */
+/* ---- Sponsor logo bar (all logos, centered with equal gaps, wraps if tight) ---- */
 .spon-splitbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 34px;
   width:100%;box-sizing:border-box;}
-.spon-splitbar-bar{background:#000;border-bottom:1px solid var(--border);padding:9px 16px;}
+/* sticky top strip: stays visible while the content scrolls (mobile + narrow) */
+.spon-splitbar-bar{position:sticky;top:0;z-index:860;background:#000;
+  border-bottom:1px solid var(--border);padding:9px 16px;}
 /* stretch across the .landing-wrap side padding so logos aren't squeezed */
 .spon-splitbar-hero{width:auto;align-self:stretch;margin:0 -16px;padding:16px 8px 8px;}
 .spon-logo-link{display:inline-flex;align-items:center;opacity:.94;transition:opacity .18s,transform .18s;}
@@ -619,4 +613,20 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   .spon-splitbar-hero{padding:16px 2px 8px;}
   .spon-splitbar-hero img{height:46px;max-height:46px;}
   .spon-splitbar-bar img{height:28px;max-height:28px;}
+}
+
+/* ---- Fixed sponsor rails in the empty side gutters (wide screens only) ---- */
+.spon-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:870;display:none;
+  flex-direction:column;align-items:center;gap:28px;width:150px;}
+.spon-rail-left{left:calc((100vw - 960px)/4 - 75px);}
+.spon-rail-right{right:calc((100vw - 960px)/4 - 75px);}
+.spon-rail-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;
+  font-size:.7rem;color:var(--muted);}
+.spon-rail .spon-logo-link{display:flex;justify-content:center;width:100%;}
+.spon-rail img{width:auto;height:auto;max-width:140px;max-height:88px;object-fit:contain;
+  border-radius:8px;display:block;}
+/* only show rails when the gutter is wide enough; then the sticky strip is redundant */
+@media (min-width:1320px){
+  .spon-rail{display:flex;}
+  .spon-splitbar-bar{display:none;}
 }
