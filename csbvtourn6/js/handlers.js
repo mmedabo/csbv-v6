@@ -9,6 +9,18 @@ import { startTournament, advanceToKnockout, toggleLive, resetPoolMatch,
 window.__render = render;
 
 /* ==========================================================================
+   THEME (warm light default, optional dark) — persisted per device
+========================================================================== */
+try { if (localStorage.getItem("csbv_theme") === "dark") document.documentElement.setAttribute("data-theme","dark"); } catch(e){}
+window.toggleTheme = () => {
+  const el = document.documentElement;
+  const toDark = el.getAttribute("data-theme") !== "dark";
+  if (toDark) el.setAttribute("data-theme","dark"); else el.removeAttribute("data-theme");
+  try { localStorage.setItem("csbv_theme", toDark ? "dark" : "light"); } catch(e){}
+  render();
+};
+
+/* ==========================================================================
    GLOBAL HANDLERS
 ========================================================================== */
 window.enterViewer = () => {

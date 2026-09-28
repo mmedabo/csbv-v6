@@ -1,9 +1,23 @@
 :root{
-  /* Light theme — high contrast for bright / outdoor use */
-  --bg:#F2F5F0;--surface:#E6EBE2;--card:#FFFFFF;--border:#CCD7C9;
+  /* Warm light theme (default) — bright / outdoor readable */
+  --bg:#F5F0E6;--surface:#ECE4D5;--card:#FFFDF7;--border:#DED3BE;
   --accent:#2C8C3A;--coral:#D64C1E;--sky:#1C82BE;--purple:#7642C9;
-  --gold:#A9780A;--muted:#5C7362;--text:#16241C;--dim:#3A4C40;
+  --gold:#A9780A;--muted:#6E6552;--text:#241F16;--dim:#4A4130;
+  --input-bg:#FFFFFF;--hi:#E9F0DE;
+  --gold-panel:#FBF3DC;--gold-panel-bd:#E6C34D;
+  --bronze-panel:#FBEEDB;--bronze-panel-bd:#D9A15A;
+  --podium-top:#FBF7EE;
   color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#000000;--surface:#122010;--card:#18291A;--border:#2A4A2E;
+  --accent:#C8F04A;--coral:#FF6B3D;--sky:#4DD9E8;--purple:#B57BFF;
+  --gold:#FFD166;--muted:#5A7A5E;--text:#E8F5E4;--dim:#8AAF8E;
+  --input-bg:#0C1A14;--hi:#1A3A1E;
+  --gold-panel:#1E1A08;--gold-panel-bd:#FFD16655;
+  --bronze-panel:#1C1408;--bronze-panel-bd:#CD7F3255;
+  --podium-top:#17140C;
+  color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Karla',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
@@ -104,7 +118,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
   text-transform:uppercase;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);}
 .standings td{padding:6px 10px;border-bottom:1px solid #1E3A20;}
 .standings tr:last-child td{border-bottom:none;}
-.standings tr.qualify{background:#E7F4E9;}
+.standings tr.qualify{background:var(--hi);}
 .rank-dot{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
   font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700;margin-right:4px;}
 .qualify-pill{font-size:.57rem;letter-spacing:1px;background:#27AE6033;color:#27AE60;border:1px solid #27AE6055;
@@ -136,7 +150,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .vs-sep{font-size:.68rem;color:var(--muted);flex-shrink:0;}
 .score-box-wrap{flex-shrink:0;}
 .score-box{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-.score-inp{width:38px;background:#fff;border:1px solid var(--border);border-radius:6px;
+.score-inp{width:38px;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;
   color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:1rem;text-align:center;padding:3px 4px;outline:none;}
 .score-inp:focus{border-color:var(--accent);}
 .score-dash{color:var(--muted);font-size:.8rem;}
@@ -182,8 +196,8 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .ko-grid-1{grid-template-columns:1fr;}
 @media(max-width:560px){.ko-grid-4,.ko-grid-2{grid-template-columns:1fr;}}
 .ko-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
-.ko-card.final-card{border-color:#E6C34D;background:#FFF8E4;}
-.ko-card.third-card{border-color:#D9A15A;background:#FBF1E4;}
+.ko-card.final-card{border-color:var(--gold-panel-bd);background:var(--gold-panel);}
+.ko-card.third-card{border-color:var(--bronze-panel-bd);background:var(--bronze-panel);}
 .ko-label{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:2px;color:var(--muted);
   text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .ko-match-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);}
@@ -195,7 +209,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .ko-score{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;min-width:28px;text-align:center;}
 
 /* ── CHAMPION ── */
-.champion-banner{background:linear-gradient(135deg,#FFF6DA,#FFEFC0);border:1px solid var(--gold);
+.champion-banner{background:var(--gold-panel);border:1px solid var(--gold);
   border-radius:16px;padding:32px;text-align:center;margin-bottom:28px;}
 .champion-icon{font-size:3rem;margin-bottom:8px;}
 .champion-label{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:3px;color:var(--gold);
@@ -238,7 +252,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .podium-step{display:flex;flex-direction:column;border:1px solid var(--border);
   border-bottom:none;border-radius:14px 14px 0 0;overflow:hidden;text-align:center;}
 .podium-top{flex:1;display:flex;flex-direction:column;justify-content:flex-end;
-  background:linear-gradient(135deg,#FBFCF9,#EFF3EC);padding:14px 8px 12px;}
+  background:var(--podium-top);padding:14px 8px 12px;}
 .podium-medal{font-size:2rem;line-height:1;margin-bottom:6px;}
 .podium-place{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:2px;
   text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
@@ -307,7 +321,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .player-row:last-child{margin-bottom:0;}
 .gender-badge{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;
   letter-spacing:1.5px;padding:3px 9px;border-radius:10px;white-space:nowrap;flex-shrink:0;min-width:72px;text-align:center;}
-.player-inp{flex:1;background:#fff;border:1px solid var(--border);border-radius:6px;
+.player-inp{flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;
   color:var(--text);font-family:'Karla',sans-serif;font-size:.83rem;padding:6px 10px;outline:none;}
 .player-inp:focus{border-color:var(--accent);}
 .player-inp::placeholder{color:var(--muted);}
@@ -629,3 +643,11 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
   .spon-rail{display:flex;}
   .spon-splitbar-bar{display:none;}
 }
+
+/* ---- KYDRA logo swaps black/white wordmark by theme ---- */
+.spon-img-dark{display:none;}
+.spon-splitbar .spon-img-dark,.spon-rail .spon-img-dark{display:none !important;}
+:root[data-theme="dark"] .spon-splitbar .spon-img-light,
+:root[data-theme="dark"] .spon-rail .spon-img-light{display:none !important;}
+:root[data-theme="dark"] .spon-splitbar .spon-img-dark,
+:root[data-theme="dark"] .spon-rail .spon-img-dark{display:block !important;}
