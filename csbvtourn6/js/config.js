@@ -34,7 +34,7 @@ const DB_NS = "csbv6";
    CONSTANTS
 ========================================================================== */
 const POOL_NAMES  = ["A","B"];
-const POOL_COLORS = ["#C8F04A","#FF6B3D"];
+const POOL_COLORS = ["#2C8C3A","#D64C1E"];
 // Four courts per pool: pool A plays on A1-A4, pool B on B1-B4.
 const COURT_NAMES = ["Court A1","Court A2","Court A3","Court A4",
                      "Court B1","Court B2","Court B3","Court B4"];

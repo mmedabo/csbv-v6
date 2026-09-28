@@ -8,13 +8,13 @@ import { state, isAdmin, isConfigured } from "./state.js";
    will replace the styled text fallback automatically.
 ========================================================================== */
 const SPONSORS = [
-  { name:"KYDRA", logo:"sponsor-kydra.png", color:"#E8F5E4",
+  { name:"KYDRA", logo:"sponsor-kydra.png", color:"#111111",
     desc:"Craft activewear, designed in Singapore. Work · Training · Life.",
     link:"kydra.co", href:"https://www.kydra.co", ig:"kydraofficial" },
-  { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#4DD9E8",
+  { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#1C82BE",
     desc:"Cold-water recovery & ice baths to keep players fresh all day.",
     link:"theicebathclubs.com", href:"https://www.theicebathclubs.com", ig:"icebathclub_sg" },
-  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#FF6B3D",
+  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#C0392B",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
@@ -331,7 +331,7 @@ function koCardHTML(m, stage, idx) {
       <span class="ko-team ${!name?"tbd":won?"won":lost?"lost":""}">
         ${esc(name)||"TBD"}${won?` <span style="margin-left:6px;font-size:.7rem">&#128081;</span>`:""}
       </span>
-      ${m.status==="done"?`<span class="ko-score" style="color:${won?"#C8F04A":"#5A7A5E"}">${score}</span>`:""}
+      ${m.status==="done"?`<span class="ko-score" style="color:${won?"#2C8C3A":"#5A7A5E"}">${score}</span>`:""}
     </div>`;
 
   let actionHTML;
@@ -438,7 +438,7 @@ function renderTournament() {
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
         <div class="hdr-stats">
           <div><div class="hdr-stat-val">${donePool}/${totalPool}</div><div class="hdr-stat-lbl">Pool Done</div></div>
-          <div><div class="hdr-stat-val" style="color:${livePool>0?"#FF6B3D":"#C8F04A"}">${livePool>0?livePool+"&#128308;":phase==="knockout"?"&#128293;":"&#9203;"}</div>
+          <div><div class="hdr-stat-val" style="color:${livePool>0?"#FF6B3D":"#2C8C3A"}">${livePool>0?livePool+"&#128308;":phase==="knockout"?"&#128293;":"&#9203;"}</div>
             <div class="hdr-stat-lbl">${livePool>0?"Live Now":phase==="knockout"?"Knockout":"Pool Phase"}</div></div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
@@ -653,9 +653,9 @@ function renderTournament() {
         if (admin) {
           // Editable: team name (propagates to pool) + 2 male + 1 female players
           const playerInputs = [
-            { idx:0, gender:"male",   label:"M Male 1",  icon:"[M]", color:"#4DD9E8" },
-            { idx:1, gender:"male",   label:"M Male 2",  icon:"[M]", color:"#4DD9E8" },
-            { idx:2, gender:"female", label:"F Female",  icon:"[F]", color:"#B57BFF" },
+            { idx:0, gender:"male",   label:"M Male 1",  icon:"[M]", color:"#1C82BE" },
+            { idx:1, gender:"male",   label:"M Male 2",  icon:"[M]", color:"#1C82BE" },
+            { idx:2, gender:"female", label:"F Female",  icon:"[F]", color:"#7642C9" },
           ].map(({idx,label,icon,color}) => `
             <div class="player-row">
               <span class="gender-badge" style="background:${color}18;color:${color};border:1px solid ${color}44">${label}</span>
@@ -689,9 +689,9 @@ function renderTournament() {
               <span style="${!name?"color:#5A7A5E;font-style:italic":""}">${esc(name)||"Not listed"}</span>
             </div>`;
           const playerList = `
-            ${viewRow("M Male 1","#4DD9E818","#4DD9E8",male1)}
-            ${viewRow("M Male 2","#4DD9E818","#4DD9E8",male2)}
-            ${viewRow("F Female","#B57BFF18","#B57BFF",female)}
+            ${viewRow("M Male 1","#1C82BE18","#1C82BE",male1)}
+            ${viewRow("M Male 2","#1C82BE18","#1C82BE",male2)}
+            ${viewRow("F Female","#7642C918","#7642C9",female)}
             ${!complete?`<div style="font-size:.7rem;color:#FF6B3D;margin-top:6px">(!) Roster incomplete</div>`:""}
           `;
 
@@ -1125,7 +1125,7 @@ function rulesContent() {
   return `
   <div class="rules-wrap">
     <div class="rules-intro">
-      <strong style="color:#C8F04A">CSBV 6.0 &bull; Rules in Motion.</strong>
+      <strong style="color:#2C8C3A">CSBV 6.0 &bull; Rules in Motion.</strong>
       Each card below is an animated explainer of a core tournament rule.
       Share this page directly: <code>mmedabo.github.io/csbvtourn6/#rules</code>
     </div>
