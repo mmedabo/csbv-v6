@@ -29,7 +29,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 
 /* ── LANDING ── */
 .landing-wrap{display:flex;flex-direction:column;align-items:center;padding:40px 16px 40px;text-align:center;}
-.landing-logo-img{width:160px;height:160px;object-fit:contain;border-radius:50%;margin-bottom:16px;}
+.landing-logo-img{width:170px;height:auto;object-fit:contain;margin-bottom:12px;}
 .landing-poster-img{width:100%;max-width:420px;border-radius:16px;object-fit:cover;box-shadow:0 8px 40px #00000088;margin-bottom:8px;}
 .landing-group-wrap{width:100%;max-width:520px;margin-top:18px;text-align:center;}
 .landing-group-img{width:100%;border-radius:16px;object-fit:cover;border:1px solid var(--border);
@@ -88,7 +88,11 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 /* ── HEADER ── */
 .hdr{padding:16px 0 16px;display:flex;align-items:flex-start;justify-content:space-between;
   border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
-.hdr-logo-img{height:48px;width:auto;object-fit:contain;border-radius:50%;}
+.hdr-logo-img{height:60px;width:auto;object-fit:contain;}
+/* CSBV logo variant swap by theme */
+.csbv-logo-dark{display:none;}
+:root[data-theme="dark"] .csbv-logo-light{display:none;}
+:root[data-theme="dark"] .csbv-logo-dark{display:inline-block;}
 .hdr-sub{font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
 .hdr-stats{display:flex;gap:18px;text-align:right;}
 .hdr-stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);line-height:1;}

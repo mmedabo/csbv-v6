@@ -19,6 +19,13 @@ const SPONSORS = [
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
 
+// CSBV logo (transparent, no black plate): dark-text variant for the light
+// theme, cream-text variant for dark. Swapped by CSS on [data-theme].
+function csbvLogo(cls) {
+  return `<img class="${cls} csbv-logo-light" src="images/logo-clear-light.png" alt="CSBV"/>`
+       + `<img class="${cls} csbv-logo-dark" src="images/logo-clear-dark.png" alt="CSBV"/>`;
+}
+
 function sponsorLogoLink(s) {
   const img = s.logoDark
     ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
@@ -93,7 +100,7 @@ function renderLanding() {
   return `
     <div class="landing-wrap">
       ${sponsorSplitBar("hero")}
-      <img src="images/logo-disc.png" class="landing-logo-img" alt="CSBV Logo"/>
+      ${csbvLogo("landing-logo-img")}
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
         <div class="stamped-photo">
@@ -434,7 +441,7 @@ function renderTournament() {
     ${fbBadge}
     <div class="hdr">
       <div>
-        <img src="images/logo-disc.png" class="hdr-logo-img" alt="CSBV"/>
+        ${csbvLogo("hdr-logo-img")}
         <div class="hdr-sub">CSBV 6.0 &bull; 3v3 . 2 Pools of 8 . Pool -> Semis -> Final</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
