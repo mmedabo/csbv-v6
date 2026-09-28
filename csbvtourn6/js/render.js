@@ -8,7 +8,7 @@ import { state, isAdmin, isConfigured } from "./state.js";
    will replace the styled text fallback automatically.
 ========================================================================== */
 const SPONSORS = [
-  { name:"KYDRA", logo:"sponsor-kydra.png", color:"#111111",
+  { name:"KYDRA", logo:"sponsor-kydra.png", logoDark:"sponsor-kydra-dark.png", color:"#111111",
     desc:"Craft activewear, designed in Singapore. Work · Training · Life.",
     link:"kydra.co", href:"https://www.kydra.co", ig:"kydraofficial" },
   { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#1C82BE",
@@ -20,8 +20,10 @@ const SPONSORS = [
 ];
 
 function sponsorLogoLink(s) {
-  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">
-    <img src="images/${s.logo}" alt="${esc(s.name)}"/></a>`;
+  const img = s.logoDark
+    ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
+    : `<img src="images/${s.logo}" alt="${esc(s.name)}"/>`;
+  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">${img}</a>`;
 }
 
 // Sponsor logo bar: all logos evenly spaced. variant "bar" (sticky top strip
@@ -91,7 +93,7 @@ function renderLanding() {
   return `
     <div class="landing-wrap">
       ${sponsorSplitBar("hero")}
-      <img src="images/logo.jpg" class="landing-logo-img" alt="CSBV Logo"/>
+      <img src="images/logo-disc.png" class="landing-logo-img" alt="CSBV Logo"/>
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
         <div class="stamped-photo">
@@ -331,7 +333,7 @@ function koCardHTML(m, stage, idx) {
       <span class="ko-team ${!name?"tbd":won?"won":lost?"lost":""}">
         ${esc(name)||"TBD"}${won?` <span style="margin-left:6px;font-size:.7rem">&#128081;</span>`:""}
       </span>
-      ${m.status==="done"?`<span class="ko-score" style="color:${won?"#2C8C3A":"#5A7A5E"}">${score}</span>`:""}
+      ${m.status==="done"?`<span class="ko-score" style="color:${won?"var(--accent)":"var(--muted)"}">${score}</span>`:""}
     </div>`;
 
   let actionHTML;
@@ -432,17 +434,18 @@ function renderTournament() {
     ${fbBadge}
     <div class="hdr">
       <div>
-        <img src="images/logo.jpg" class="hdr-logo-img" alt="CSBV"/>
+        <img src="images/logo-disc.png" class="hdr-logo-img" alt="CSBV"/>
         <div class="hdr-sub">CSBV 6.0 &bull; 3v3 . 2 Pools of 8 . Pool -> Semis -> Final</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
         <div class="hdr-stats">
           <div><div class="hdr-stat-val">${donePool}/${totalPool}</div><div class="hdr-stat-lbl">Pool Done</div></div>
-          <div><div class="hdr-stat-val" style="color:${livePool>0?"#FF6B3D":"#2C8C3A"}">${livePool>0?livePool+"&#128308;":phase==="knockout"?"&#128293;":"&#9203;"}</div>
+          <div><div class="hdr-stat-val" style="color:${livePool>0?"var(--coral)":"var(--accent)"}">${livePool>0?livePool+"&#128308;":phase==="knockout"?"&#128293;":"&#9203;"}</div>
             <div class="hdr-stat-lbl">${livePool>0?"Live Now":phase==="knockout"?"Knockout":"Pool Phase"}</div></div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           ${rolePill}${switchBtn}
+          <button class="btn btn-ghost btn-sm no-print" onclick="toggleTheme()" title="Toggle light / dark">${(typeof document!=="undefined"&&document.documentElement.getAttribute("data-theme")==="dark")?"&#9728;&#65039; Light":"&#127769; Dark"}</button>
           <button class="btn btn-ghost btn-sm no-print" onclick="exportPNG()" title="Download PNG">&#11015; PNG</button>
           <button class="btn btn-ghost btn-sm no-print" onclick="window.print()" title="Print / Save as PDF">&#128424; PDF</button>
         </div>
@@ -1125,7 +1128,7 @@ function rulesContent() {
   return `
   <div class="rules-wrap">
     <div class="rules-intro">
-      <strong style="color:#2C8C3A">CSBV 6.0 &bull; Rules in Motion.</strong>
+      <strong style="color:var(--accent)">CSBV 6.0 &bull; Rules in Motion.</strong>
       Each card below is an animated explainer of a core tournament rule.
       Share this page directly: <code>mmedabo.github.io/csbvtourn6/#rules</code>
     </div>
