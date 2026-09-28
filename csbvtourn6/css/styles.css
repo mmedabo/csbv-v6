@@ -597,7 +597,7 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
 .spon-logo-link:hover{opacity:1;transform:translateY(-1px);}
 .spon-splitbar img{width:auto;max-width:100%;object-fit:contain;border-radius:6px;display:block;}
 .spon-splitbar-bar img{height:34px;max-height:34px;}
-.spon-splitbar-hero img{height:66px;max-height:66px;}
+.spon-splitbar-hero img{height:78px;max-height:78px;}
 
 .landing-sponsors{margin:22px auto 6px;text-align:center;display:flex;flex-direction:column;
   align-items:center;gap:10px;}
@@ -611,22 +611,22 @@ code{background:#1E3A20;padding:2px 6px;border-radius:4px;font-size:.82em;}
   .spon-splitbar{gap:12px 18px;}
   .spon-splitbar-bar{padding:8px 10px;}
   .spon-splitbar-hero{padding:16px 2px 8px;}
-  .spon-splitbar-hero img{height:46px;max-height:46px;}
+  .spon-splitbar-hero img{height:50px;max-height:50px;}
   .spon-splitbar-bar img{height:28px;max-height:28px;}
 }
 
 /* ---- Fixed sponsor rails in the empty side gutters (wide screens only) ---- */
 .spon-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:870;display:none;
-  flex-direction:column;align-items:center;gap:28px;width:150px;}
-.spon-rail-left{left:calc((100vw - 960px)/4 - 75px);}
-.spon-rail-right{right:calc((100vw - 960px)/4 - 75px);}
+  flex-direction:column;align-items:center;gap:30px;width:180px;}
+.spon-rail-left{left:calc((100vw - 960px)/4 - 90px);}
+.spon-rail-right{right:calc((100vw - 960px)/4 - 90px);}
 .spon-rail-lbl{font-family:'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;
   font-size:.7rem;color:var(--muted);}
 .spon-rail .spon-logo-link{display:flex;justify-content:center;width:100%;}
-.spon-rail img{width:auto;height:auto;max-width:140px;max-height:88px;object-fit:contain;
+.spon-rail img{width:auto;height:auto;max-width:168px;max-height:108px;object-fit:contain;
   border-radius:8px;display:block;}
 /* only show rails when the gutter is wide enough; then the sticky strip is redundant */
-@media (min-width:1320px){
+@media (min-width:1380px){
   .spon-rail{display:flex;}
   .spon-splitbar-bar{display:none;}
 }
