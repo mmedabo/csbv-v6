@@ -19,29 +19,32 @@ const SPONSORS = [
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
 
-function sponsorFooter() {
-  const names = SPONSORS.map(s =>
-    `<span class="spon-footer-name">${esc(s.name)}</span>`
-  ).join(`<span class="spon-footer-sep">&bull;</span>`);
-  return `
-    <div class="spon-footer">
-      <span class="spon-footer-lbl">Proudly supported by</span>
-      ${names}
-    </div>`;
-}
-
 function sponsorLogoLink(s) {
   return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">
     <img src="images/${s.logo}" alt="${esc(s.name)}"/></a>`;
 }
 
-// Sponsor logo bar pinned at the very top: all three logos evenly spaced.
-// variant "bar" (compact, tournament views) or "hero" (large, landing).
+// Sponsor logo bar: all logos evenly spaced. variant "bar" (sticky top strip
+// on narrow screens) or "hero" (large, landing).
 function sponsorSplitBar(variant) {
   return `
     <div class="spon-splitbar spon-splitbar-${variant}">
       ${SPONSORS.map(sponsorLogoLink).join("")}
     </div>`;
+}
+
+// Fixed sponsor rails that live in the empty side gutters on wide screens and
+// stay visible while the content scrolls. Sponsors are split across the two
+// rails (left = first half, right = rest). Hidden on narrow screens (the
+// sticky top strip shows there instead). Handles up to 4 sponsors cleanly.
+function sponsorRails() {
+  const half  = Math.ceil(SPONSORS.length / 2);
+  const rail = (list, side) => `
+    <div class="spon-rail spon-rail-${side}">
+      <div class="spon-rail-lbl">Sponsors</div>
+      ${list.map(sponsorLogoLink).join("")}
+    </div>`;
+  return rail(SPONSORS.slice(0, half), "left") + rail(SPONSORS.slice(half), "right");
 }
 
 function sponsorsContent() {
@@ -72,7 +75,7 @@ function sponsorsContent() {
       <div class="spon-eyebrow">CSBV 6.0 &bull; Proudly Supported By</div>
       <div class="spon-title">Our Sponsors</div>
       <div class="spon-tagline">Stronger Community &bull; Brighter Days</div>
-      <div class="spon-prize">&#127942; Activewear prizes for all winners</div>
+      <div class="spon-prize">&#127942; Loads of prizes &mdash; announced on tournament day</div>
     </div>
     <div class="spon-grid">${cards}</div>
     <div class="spon-thanks">
@@ -102,7 +105,7 @@ function renderLanding() {
 
       <div class="landing-sponsors">
         <div class="landing-spon-lbl">&#127775; Proudly Supported By</div>
-        <div class="landing-spon-prize">&#127942; Activewear prizes for all winners</div>
+        <div class="landing-spon-prize">&#127942; Loads of prizes &mdash; announced on the day</div>
       </div>
 
       <div class="landing-cards">
@@ -600,27 +603,12 @@ function renderTournament() {
           <div class="podium-bar">${place}</div>
         </div>`;
       };
-      // Photo under each podium column (file optional — hides itself if absent)
-      const podiumPhoto = (file, name, cls) => `
-        <div class="podium-photo podium-photo-${cls}">
-          <img src="images/${file}" alt="${name?esc(name):''}"
-            onerror="this.closest('.podium-photo').remove()"/>
-        </div>`;
       const champBanner = champion ? `
-        <div class="winners-photo-wrap">
-          <img src="images/allwinner.jpg" class="winners-photo" alt="CSBV 6.0 Winners"
-            onerror="this.closest('.winners-photo-wrap').remove()"/>
-          <div class="winners-photo-cap">&#127942; CSBV 6.0 Podium Finishers</div>
-        </div>
+        <div class="winners-cap">&#127942; CSBV 6.0 Podium Finishers</div>
         <div class="podium">
           ${podiumStep(2,"&#129352;","Runner-up",silver,"silver")}
           ${podiumStep(1,"&#129351;","Champion",champion,"gold")}
           ${podiumStep(3,"&#129353;","3rd Place",bronze,"bronze")}
-        </div>
-        <div class="podium-photos">
-          ${podiumPhoto("runnerup.jpg",silver,"silver")}
-          ${podiumPhoto("champion.jpg",champion,"gold")}
-          ${podiumPhoto("third.jpg",bronze,"bronze")}
         </div>` : "";
 
       const sfCards   = pools.koMatches.sf.map((m,i)=>koCardHTML(m,"sf",i)).join("");
@@ -649,16 +637,7 @@ function renderTournament() {
         <div class="ko-section">
           <div class="ko-title">Final &#127942; &amp; 3rd Place &#129353; <div class="ko-title-bar"></div></div>
           <div class="ko-grid ko-grid-2">${finalCard}${thirdCard}</div>
-        </div>
-        ${champion ? `
-        <div class="group-photo-wrap">
-          <div class="stamped-photo">
-            <img src="images/tourn55group.jpg" class="group-photo" alt="CSBV 6.0 — Everyone"
-              onerror="if(this.dataset.f){this.closest('.group-photo-wrap').remove()}else{this.dataset.f=1;this.src='images/tourn55group.png'}"/>
-            <img src="images/logo.jpg" class="photo-stamp" alt="CSBV" onerror="this.remove()"/>
-          </div>
-          <div class="group-photo-cap">&#127958; CSBV 6.0 &mdash; Till the next one!</div>
-        </div>` : ""}`;
+        </div>`;
     }
   }
 
@@ -1109,7 +1088,7 @@ function renderTournament() {
     content = sponsorsContent();
   }
 
-  return `${sponsorSplitBar("bar")}${hdr}${tabs}<div class="content">${content}</div>${sponsorFooter()}`;
+  return `${sponsorRails()}${sponsorSplitBar("bar")}${hdr}${tabs}<div class="content">${content}</div>`;
 }
 
 /* ==========================================================================
