@@ -104,7 +104,6 @@ function renderLanding() {
       <div class="landing-toolbar no-print">
         <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" title="Toggle light / dark">${(typeof document!=="undefined"&&document.documentElement.getAttribute("data-theme")==="dark")?"&#9728;&#65039; Light":"&#127769; Dark"}</button>
       </div>
-      ${sponsorSplitBar("hero")}
       ${csbvLogo("landing-logo-img")}
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
@@ -119,6 +118,7 @@ function renderLanding() {
 
       <div class="landing-sponsors">
         <div class="landing-spon-lbl">&#127775; Proudly Supported By</div>
+        ${sponsorSplitBar("hero")}
         <div class="landing-spon-prize">&#127942; Loads of prizes &mdash; announced on the day</div>
       </div>
 
