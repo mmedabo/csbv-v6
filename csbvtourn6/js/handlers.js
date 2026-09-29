@@ -11,12 +11,15 @@ window.__render = render;
 /* ==========================================================================
    THEME (warm light default, optional dark) — persisted per device
 ========================================================================== */
-try { if (localStorage.getItem("csbv_theme") === "dark") document.documentElement.setAttribute("data-theme","dark"); } catch(e){}
+// Default is warm light. Dark applies only if this device explicitly chose it.
+// Key is versioned (csbv_theme2) so any earlier remembered value is ignored once,
+// guaranteeing a light default on first load after this change.
+try { if (localStorage.getItem("csbv_theme2") === "dark") document.documentElement.setAttribute("data-theme","dark"); } catch(e){}
 window.toggleTheme = () => {
   const el = document.documentElement;
   const toDark = el.getAttribute("data-theme") !== "dark";
   if (toDark) el.setAttribute("data-theme","dark"); else el.removeAttribute("data-theme");
-  try { localStorage.setItem("csbv_theme", toDark ? "dark" : "light"); } catch(e){}
+  try { localStorage.setItem("csbv_theme2", toDark ? "dark" : "light"); } catch(e){}
   render();
 };
 
