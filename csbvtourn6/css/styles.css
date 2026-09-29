@@ -651,3 +651,8 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 :root[data-theme="dark"] .spon-rail .spon-img-light{display:none !important;}
 :root[data-theme="dark"] .spon-splitbar .spon-img-dark,
 :root[data-theme="dark"] .spon-rail .spon-img-dark{display:block !important;}
+
+/* ---- CSBV logo swaps artwork by theme (outlined on light, original on dark) ---- */
+.csbv-logo-dark{display:none !important;}
+:root[data-theme="dark"] .csbv-logo-light{display:none !important;}
+:root[data-theme="dark"] .csbv-logo-dark{display:inline-block !important;}
