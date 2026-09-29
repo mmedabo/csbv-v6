@@ -101,6 +101,9 @@ function sponsorsContent() {
 function renderLanding() {
   return `
     <div class="landing-wrap">
+      <div class="landing-toolbar no-print">
+        <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" title="Toggle light / dark">${(typeof document!=="undefined"&&document.documentElement.getAttribute("data-theme")==="dark")?"&#9728;&#65039; Light":"&#127769; Dark"}</button>
+      </div>
       ${sponsorSplitBar("hero")}
       ${csbvLogo("landing-logo-img")}
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
