@@ -19,10 +19,13 @@ const SPONSORS = [
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
 
-// CSBV logo — original artwork with only the black background removed
-// (transparent). Works on both themes.
+// CSBV logo — theme-specific artwork:
+//  • light theme: supplied logo with black outlines (legible on the cream bg)
+//  • dark theme : original clean logo (cream text on black, no outlines)
+// CSS (.csbv-logo-light / .csbv-logo-dark) swaps them by data-theme.
 function csbvLogo(cls) {
-  return `<img class="${cls}" src="images/logo-clear.png" alt="CSBV"/>`;
+  return `<img class="${cls} csbv-logo-light" src="images/logo-clear.png" alt="CSBV"/>`
+       + `<img class="${cls} csbv-logo-dark" src="images/logo-dark.png" alt="CSBV"/>`;
 }
 
 function sponsorLogoLink(s) {
