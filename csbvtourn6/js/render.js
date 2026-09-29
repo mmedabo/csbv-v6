@@ -106,11 +106,11 @@ function renderLanding() {
       <img src="images/poster.jpg" class="landing-poster-img" alt="CSBV 6.0 Tournament"/>
       <div class="landing-group-wrap">
         <div class="stamped-photo">
-          <img src="images/tourn55group.jpg" class="landing-group-img" alt="CSBV 6.0 — The whole crew"
+          <img src="images/tourn55group.jpg" class="landing-group-img" alt="CSBV 5.5 — the whole family from last tournament"
             onerror="this.closest('.landing-group-wrap').remove()"/>
           <img src="images/logo.jpg" class="photo-stamp" alt="CSBV" onerror="this.remove()"/>
         </div>
-        <div class="landing-group-cap">&#127958; CSBV 6.0 &mdash; The whole crew</div>
+        <div class="landing-group-cap">&#128248; Last tournament &bull; CSBV 5.5 family</div>
       </div>
       <div class="landing-sub" style="margin-top:24px">3v3 &bull; 2 Pools . 8 Teams per Pool . Pool -> Semis -> Final</div>
 
