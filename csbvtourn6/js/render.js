@@ -194,9 +194,9 @@ function poolCardHTML(pi) {
         <td></td>
         <td colspan="4">
           <div class="team-player-list">
-            ${male1  ? `<span class="player-chip male-chip">&#9794; ${esc(male1)}</span>`  : ""}
-            ${male2  ? `<span class="player-chip male-chip">&#9794; ${esc(male2)}</span>`  : ""}
-            ${female ? `<span class="player-chip female-chip">&#9792; ${esc(female)}</span>` : ""}
+            ${male1  ? `<span class="player-chip neutral-chip">${esc(male1)}</span>`  : ""}
+            ${male2  ? `<span class="player-chip neutral-chip">${esc(male2)}</span>`  : ""}
+            ${female ? `<span class="player-chip neutral-chip">${esc(female)}</span>` : ""}
           </div>
         </td>
       </tr>` : "";
@@ -674,16 +674,12 @@ function renderTournament() {
         const teamLabel = pools ? pools.teams[pi][ti] : (state.teamNames[pi][ti] || `Team ${ti+1}`);
 
         if (admin) {
-          // Editable: team name (propagates to pool) + 2 male + 1 female players
-          const playerInputs = [
-            { idx:0, gender:"male",   label:"M Male 1",  icon:"[M]", color:"#1C82BE" },
-            { idx:1, gender:"male",   label:"M Male 2",  icon:"[M]", color:"#1C82BE" },
-            { idx:2, gender:"female", label:"F Female",  icon:"[F]", color:"#7642C9" },
-          ].map(({idx,label,icon,color}) => `
+          // Editable: team name (propagates to pool) + 3 players
+          const playerInputs = [0,1,2].map(idx => `
             <div class="player-row">
-              <span class="gender-badge" style="background:${color}18;color:${color};border:1px solid ${color}44">${label}</span>
+              <span class="gender-badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border)">Player ${idx+1}</span>
               <input class="player-inp" value="${esc(team.players?.[idx]||'')}"
-                placeholder="${icon} Player name"
+                placeholder="Player name"
                 oninput="updatePlayer(${pi},${ti},${idx},this.value)"/>
             </div>`).join("");
 
@@ -701,20 +697,20 @@ function renderTournament() {
               <div class="player-list">${playerInputs}</div>
             </div>`;
         } else {
-          // View only (2 male + 1 female)
-          const male1  = (team.players||[])[0]?.trim() || "";
-          const male2  = (team.players||[])[1]?.trim() || "";
-          const female = (team.players||[])[2]?.trim() || "";
-          const complete = male1 && male2 && female;
-          const viewRow = (label, bg, col, name) => `
+          // View only (3 players)
+          const p1 = (team.players||[])[0]?.trim() || "";
+          const p2 = (team.players||[])[1]?.trim() || "";
+          const p3 = (team.players||[])[2]?.trim() || "";
+          const complete = p1 && p2 && p3;
+          const viewRow = (label, name) => `
             <div class="player-view-row">
-              <span class="gender-badge" style="background:${bg};color:${col};border:1px solid ${col}44">${label}</span>
+              <span class="gender-badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border)">${label}</span>
               <span style="${!name?"color:#5A7A5E;font-style:italic":""}">${esc(name)||"Not listed"}</span>
             </div>`;
           const playerList = `
-            ${viewRow("M Male 1","#1C82BE18","#1C82BE",male1)}
-            ${viewRow("M Male 2","#1C82BE18","#1C82BE",male2)}
-            ${viewRow("F Female","#7642C918","#7642C9",female)}
+            ${viewRow("Player 1",p1)}
+            ${viewRow("Player 2",p2)}
+            ${viewRow("Player 3",p3)}
             ${!complete?`<div style="font-size:.7rem;color:#FF6B3D;margin-top:6px">(!) Roster incomplete</div>`:""}
           `;
 
@@ -743,7 +739,7 @@ function renderTournament() {
 
     content = `
       <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <span class="tag">${admin ? "Edit team names . 2 male + 1 female per team . Changes sync everywhere" : "Team rosters . 3v3 mixed format (2M + 1F)"}</span>
+        <span class="tag">${admin ? "Edit team names . 3 players per team . Changes sync everywhere" : "Team rosters . 3v3 . 3 players per team"}</span>
         ${admin ? `<span style="font-size:.75rem;color:#5A7A5E">Changes sync live to all viewers</span>` : ""}
       </div>
       ${teamCards}
