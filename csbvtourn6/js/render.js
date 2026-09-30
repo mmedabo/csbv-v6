@@ -1140,18 +1140,54 @@ function render() {
 /* ==========================================================================
    RULES TAB - animated SVG explainers (CSBV 6.0 "Rules in Motion")
 ========================================================================== */
+const RULE_META = [
+  { n:1,  title:"Service" },        { n:2,  title:"Touches" },
+  { n:3,  title:"Ball In / Out" },  { n:4,  title:"Self-Refereed" },
+  { n:5,  title:"Replay the Point" },{ n:6,  title:"High-Five" },
+  { n:7,  title:"Switch Sides" },   { n:8,  title:"No Open-Hand Tip" },
+  { n:9,  title:"No Block/Spike on Serve" }, { n:10, title:"Clean Set (no spin)" },
+  { n:11, title:"Set Over Net (square)" },   { n:12, title:"Serve Order" },
+  { n:13, title:"Net Touch (fault)" },       { n:14, title:"Under the Net" },
+  { n:15, title:"Clean Contact (no lift)" },
+];
+
 function rulesContent() {
+  const admin  = isAdmin();
+  const hidden = state.hiddenRules || {};
+  const hiddenIds = RULE_META.filter(r => hidden[r.n]).map(r => r.n);
+  // Viewers: hidden cards are removed. Admin: they stay but are dimmed so the
+  // admin can still see and re-enable them.
+  const visStyle = hiddenIds.length
+    ? (admin
+        ? `<style>${hiddenIds.map(n=>`#rule-${n}`).join(",")}{opacity:.32;filter:grayscale(.7)}</style>`
+        : `<style>${hiddenIds.map(n=>`#rule-${n}`).join(",")}{display:none}</style>`)
+    : "";
+  const adminPanel = admin ? `
+    <div class="rules-admin">
+      <div class="rules-admin-hdr">
+        <span>Rule visibility &mdash; tap to show / hide (syncs live to viewers)</span>
+        <span class="rules-admin-actions">
+          <button class="btn btn-ghost btn-sm" onclick="setAllRules(false)">Show all</button>
+          <button class="btn btn-ghost btn-sm" onclick="setAllRules(true)">Hide all</button>
+        </span>
+      </div>
+      <div class="rules-admin-chips">
+        ${RULE_META.map(r => `<button class="rule-chip ${hidden[r.n]?"off":"on"}" onclick="toggleRuleVisibility(${r.n})">${hidden[r.n]?"&#9744;":"&#9745;"} ${r.title}</button>`).join("")}
+      </div>
+    </div>` : "";
   return `
   <div class="rules-wrap">
+    ${visStyle}
     <div class="rules-intro">
       <strong style="color:var(--accent)">CSBV 6.0 &bull; Rules in Motion.</strong>
       Each card below is an animated explainer of a core tournament rule.
       Share this page directly: <code>mmedabo.github.io/csbvtourn6/#rules</code>
     </div>
+    ${adminPanel}
     <div class="rules-grid">
 
     <!-- 1. SERVICE -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-1">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Serve from anywhere behind the back line, within the corner limits">
       <style>
         .r1-zone{animation:r1z 2.4s ease-in-out infinite}
@@ -1216,7 +1252,7 @@ function rulesContent() {
     </div>
 
     <!-- 2. TOUCHES -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-2">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Max 3 touches per side">
       <style>
         .r2-n{font-family:Oswald,Arial Narrow,sans-serif;font-weight:700;font-size:22px;fill:#EFD9A0;opacity:0;transform-origin:center;transform-box:fill-box}
@@ -1248,7 +1284,7 @@ function rulesContent() {
     </div>
 
     <!-- 3. BALL IN / OUT -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-3">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ball on the line is in">
       <style>
         .r3-ball{animation:r3drop 3s ease-in infinite;transform-origin:262px 196px;transform-box:view-box}
@@ -1279,7 +1315,7 @@ function rulesContent() {
     </div>
 
     <!-- 4. SELF-REFEREED -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-4">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Self refereed, make fair calls">
       <style>
         .r4-arm{animation:r4raise 3s ease-in-out infinite;transform-origin:200px 192px;transform-box:view-box}
@@ -1303,7 +1339,7 @@ function rulesContent() {
     </div>
 
     <!-- 5. REPLAY THE POINT -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-5">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Disagreement? Replay the point">
       <style>
         .r5-spin{animation:r5sp 2.6s linear infinite;transform-origin:200px 165px;transform-box:view-box}
@@ -1337,7 +1373,7 @@ function rulesContent() {
     </div>
 
     <!-- 6. HIGH-FIVE -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-6">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shake hands or high five before and after matches">
       <style>
         .r6-l{animation:r6l 2.4s ease-in-out infinite}
@@ -1380,7 +1416,7 @@ function rulesContent() {
     </div>
 
     <!-- 7. SWITCH SIDES -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-7">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Switch sides every 5 or 7 points">
       <style>
         .r7-sun{animation:r7s 8s linear infinite;transform-origin:62px 96px;transform-box:view-box}
@@ -1411,7 +1447,7 @@ function rulesContent() {
     </div>
 
     <!-- 8. NO OPEN-HAND TIP -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-8">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="No open hand tipping, dunking or touching the net">
       <style>
         .r8-hand{animation:r8h 2.2s ease-in-out infinite;transform-box:view-box;transform-origin:185px 160px}
@@ -1443,7 +1479,7 @@ function rulesContent() {
     </div>
 
     <!-- 9. NO BLOCK / SPIKE ON SERVE -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-9">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="No blocking or spiking a serve">
       <style>
         .r9-blk{animation:r9b 3s ease-out infinite;transform-box:view-box;transform-origin:222px 150px}
@@ -1477,7 +1513,7 @@ function rulesContent() {
     </div>
 
     <!-- 10. CLEAN SET (no spin) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-10">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Set the ball clean with no spin; a spinning ball is a double-contact fault">
       <style>
         .r10-ok{animation:r10a 5s infinite}@keyframes r10a{0%,44%{opacity:1}50%,100%{opacity:0}}
@@ -1507,7 +1543,7 @@ function rulesContent() {
     </div>
 
     <!-- 11. SET OVER THE NET (square only) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-11">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Setting over the net is legal only if square, perpendicular to the line of your shoulders, front or back">
       <style>
         .r11-ok{animation:r11a 5s infinite}@keyframes r11a{0%,44%{opacity:1}50%,100%{opacity:0}}
@@ -1537,7 +1573,7 @@ function rulesContent() {
     </div>
 
     <!-- 12. SERVE ORDER (rotation) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-12">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Teams keep a fixed serving order; the next player in the rotation serves at each side-out">
       <style>
         .r12-a{animation:r12a 4s infinite}@keyframes r12a{0%,40%{opacity:1}50%,100%{opacity:0}}
@@ -1567,7 +1603,7 @@ function rulesContent() {
     </div>
 
     <!-- 13. NET TOUCH (fault) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-13">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Touching the net during play is a fault">
       <style>
         .r13-net{animation:r13n 2.4s ease-in-out infinite}@keyframes r13n{0%,55%{stroke:#F4E9C8}70%,85%{stroke:#E04444}100%{stroke:#F4E9C8}}
@@ -1596,7 +1632,7 @@ function rulesContent() {
     </div>
 
     <!-- 14. UNDER THE NET (no crossing) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-14">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Do not cross under the net or interfere with the opponent's space">
       <style>
         .r14-foot{animation:r14f 3s ease-in-out infinite}@keyframes r14f{0%,100%{transform:translateX(0)}45%,70%{transform:translateX(46px)}}
@@ -1625,7 +1661,7 @@ function rulesContent() {
     </div>
 
     <!-- 15. CLEAN CONTACT (no lift) -->
-    <div class="rules-card">
+    <div class="rules-card" id="rule-15">
     <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hit the ball cleanly; no catching, holding, lifting or throwing">
       <style>
         .r15-ok{animation:r15a 5s infinite}@keyframes r15a{0%,44%{opacity:1}50%,100%{opacity:0}}

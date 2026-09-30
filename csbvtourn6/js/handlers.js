@@ -1,5 +1,5 @@
 import { state, isAdmin, syncToFirebase, syncTeamsData, syncSchedule, syncInventory,
-         syncAuditLog, syncDaySchedule, startFirebaseListener, isConfigured, applyFinalRoster } from "./state.js";
+         syncAuditLog, syncDaySchedule, syncRulesConfig, startFirebaseListener, isConfigured, applyFinalRoster } from "./state.js";
 import { ADMIN_PIN } from "./config.js";
 import { render } from "./render.js";
 import { startTournament, advanceToKnockout, toggleLive, resetPoolMatch,
@@ -168,6 +168,21 @@ window.loadFinalRoster = () => {
   applyFinalRoster();
   render();
   alert("Final roster loaded and synced to all viewers.");
+};
+
+window.toggleRuleVisibility = (n) => {
+  if (!state.hiddenRules) state.hiddenRules = {};
+  if (state.hiddenRules[n]) delete state.hiddenRules[n];
+  else state.hiddenRules[n] = true;
+  syncRulesConfig();
+  render();
+};
+
+window.setAllRules = (hide) => {
+  state.hiddenRules = {};
+  if (hide) for (let n = 1; n <= 15; n++) state.hiddenRules[n] = true;
+  syncRulesConfig();
+  render();
 };
 
 window.updatePlayer = (pi, ti, playerIdx, val) => {

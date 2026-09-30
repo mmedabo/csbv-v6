@@ -568,6 +568,21 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
   box-shadow:0 10px 24px rgba(0,0,0,.35);}
 @media (prefers-reduced-motion: reduce){ .rules-card svg *{animation:none !important;} }
 
+/* ---- Admin: rule visibility panel ---- */
+.rules-admin{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin:0 0 18px;}
+.rules-admin-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-bottom:10px;}
+.rules-admin-actions{display:flex;gap:6px;}
+.rules-admin-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.rule-chip{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:600;
+  letter-spacing:.5px;padding:5px 11px;border-radius:20px;cursor:pointer;transition:all .15s;
+  white-space:nowrap;}
+.rule-chip.on{background:var(--hi);color:var(--accent);border:1px solid var(--accent);}
+.rule-chip.off{background:var(--surface);color:var(--muted);border:1px solid var(--border);
+  text-decoration:line-through;}
+.rule-chip:hover{transform:translateY(-1px);}
+
 /* ==========================================================================
    SPONSORS TAB + FOOTER STRIP (CSBV 6.0)
 ========================================================================== */
