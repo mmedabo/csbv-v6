@@ -38,10 +38,10 @@ const POOL_COLORS = ["#2C8C3A","#D64C1E"];
 // Four courts per pool: pool A plays on A1-A4, pool B on B1-B4.
 const COURT_NAMES = ["Court A1","Court A2","Court A3","Court A4",
                      "Court B1","Court B2","Court B3","Court B4"];
-// Neutral placeholders — real team names are entered on the day.
+// Team labels: 8 teams per pool (A1-A8, B1-B8).
 const DEFAULT_TEAMS = [
-  ["Team A1","Team A2","Team A3","Team A4","Team A5","Team A6","Team A7","Team A8"],
-  ["Team B1","Team B2","Team B3","Team B4","Team B5","Team B6","Team B7","Team B8"],
+  ["A1","A2","A3","A4","A5","A6","A7","A8"],
+  ["B1","B2","B3","B4","B5","B6","B7","B8"],
 ];
 
 export { firebaseConfig, ADMIN_PIN, DB_NS, POOL_NAMES, POOL_COLORS, COURT_NAMES, DEFAULT_TEAMS,

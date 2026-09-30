@@ -105,6 +105,35 @@ function startFirebaseListener() {
 }
 
 /* ==========================================================================
+   FINAL ROSTERS
+   One entry per team, in the same order as DEFAULT_TEAMS (A1-A8, then B1-B8).
+   Each roster is [male 1, male 2, female] to match the players[] order used
+   throughout the app.
+========================================================================== */
+const ROSTERS = [
+  [ // Pool A
+    ["Stanley","Dennis","Minky"],       // A1
+    ["Josh","Mika","Iris"],             // A2
+    ["Eugene","Ray","Kelly"],           // A3
+    ["Ivan A","Sup","gladys"],          // A4
+    ["Gene","Aly","Julia"],             // A5
+    ["Alex","Adrian Lowry","gidselle"], // A6
+    ["EK","Todd","Jolene"],             // A7
+    ["Jules","Ash","Karen"],            // A8
+  ],
+  [ // Pool B
+    ["Barath","Pram","Isla"],           // B1
+    ["Henry","Yatha","Bernie"],         // B2
+    ["Mitchell","Maddy","Liz"],         // B3
+    ["Anas","Marcus","Carla"],          // B4
+    ["Rossi","Shane","Solène"],         // B5
+    ["Fai","Sat","Dewi"],               // B6
+    ["Anand","Din","Anna"],             // B7
+    ["Ivan T","David","Jess"],          // B8
+  ],
+];
+
+/* ==========================================================================
    STATE
 ========================================================================== */
 let state = {
@@ -122,9 +151,9 @@ let state = {
   koEditing: null,
   koScores: { s1:"", s2:"" },
   // teamsData: { pool: [ { teamName, players: [str] } ] }
-  // 3 players per team: [male, male, female]
+  // 3 players per team, in order: [male 1, male 2, female]
   teamsData: POOL_NAMES.map((_,pi) =>
-    DEFAULT_TEAMS[pi].map(name => ({ teamName: name, players: ["","",""] }))
+    DEFAULT_TEAMS[pi].map((name,ti) => ({ teamName: name, players: [...ROSTERS[pi][ti]] }))
   ),
   editingTeamsData: false,
   schedule: {},
