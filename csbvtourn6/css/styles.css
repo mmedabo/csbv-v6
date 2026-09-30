@@ -486,6 +486,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
   letter-spacing:.5px;white-space:nowrap;}
 .male-chip{background:#1C82BE18;color:#1C82BE;border:1px solid #1C82BE44;}
 .female-chip{background:#7642C918;color:#7642C9;border:1px solid #7642C944;}
+.neutral-chip{background:var(--surface);color:var(--text);border:1px solid var(--border);}
 
 /* ── POOL CARD EXPAND/COLLAPSE ── */
 .pool-header-clickable{cursor:pointer;user-select:none;transition:background .15s;}
