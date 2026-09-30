@@ -20,6 +20,7 @@ function syncSchedule()  { if (db) set(dbRef("schedule"),  state.schedule); }
 function syncDaySchedule() { if (db) set(dbRef("daySchedule"), state.daySchedule); }
 function syncInventory() { if (db) set(dbRef("inventory"), state.inventory); }
 function syncAuditLog() { if (db) set(dbRef("auditLog"), state.auditLog); }
+function syncRulesConfig() { if (db) set(dbRef("rulesConfig"), state.hiddenRules); }
 
 function addAuditEntry(entry) {
   state.auditLog = [{ ...entry, ts: Date.now() }, ...state.auditLog].slice(0, 200);
@@ -81,6 +82,12 @@ function startFirebaseListener() {
   onValue(dbRef("daySchedule"), snap => {
     const data = snap.val();
     if (data) state.daySchedule = data;
+  });
+
+  onValue(dbRef("rulesConfig"), snap => {
+    const data = snap.val();
+    state.hiddenRules = data || {};
+    if (typeof window.__render === 'function') window.__render();
   });
 
   onValue(dbRef("teamsData"), snap => {
@@ -173,6 +180,7 @@ let state = {
     { id:"ds12", time:"6:00-6:10", activity:"Prize presentation" },
     { id:"ds13", time:"6:10-6:20", activity:"Champions photos / closing &#128247;" },
   ],
+  hiddenRules: {}, // { ruleNumber: true } — rule cards hidden from viewers (synced)
   expandedTeams: {}, // { 'poolIdx-teamName': true } — UI only, not synced
   expandedPools: { 0:true, 1:false }, // only Pool A open by default
   auditLog: [],
@@ -225,4 +233,4 @@ function applyFinalRoster() {
 
 export { state, isAdmin, isConfigured, db, applyFinalRoster,
          syncToFirebase, syncTeamsData, syncSchedule, syncAuditLog, addAuditEntry,
-         syncInventory, syncDaySchedule, startFirebaseListener };
+         syncInventory, syncDaySchedule, syncRulesConfig, startFirebaseListener };
