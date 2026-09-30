@@ -1,5 +1,5 @@
 import { state, isAdmin, syncToFirebase, syncTeamsData, syncSchedule, syncInventory,
-         syncAuditLog, syncDaySchedule, startFirebaseListener, isConfigured } from "./state.js";
+         syncAuditLog, syncDaySchedule, startFirebaseListener, isConfigured, applyFinalRoster } from "./state.js";
 import { ADMIN_PIN } from "./config.js";
 import { render } from "./render.js";
 import { startTournament, advanceToKnockout, toggleLive, resetPoolMatch,
@@ -161,6 +161,13 @@ window.confirmGenerate = () => {
     }
   }
   startTournament();
+};
+
+window.loadFinalRoster = () => {
+  if (!confirm("Load the final 16-team roster (A1-B8) and push it live?\n\nThis replaces the current team names and players in the database. Match scores are kept.")) return;
+  applyFinalRoster();
+  render();
+  alert("Final roster loaded and synced to all viewers.");
 };
 
 window.updatePlayer = (pi, ti, playerIdx, val) => {

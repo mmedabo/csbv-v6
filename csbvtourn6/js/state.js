@@ -203,6 +203,24 @@ let state = {
 
 const isAdmin = () => state.role === "admin";
 
-export { state, isAdmin, isConfigured, db,
+// Force the final 16-team roster (A1-B8) into state and push it to Firebase,
+// overriding whatever is currently stored. Used by the admin "Load Final
+// Roster" button so the live roster can be set from the browser (the DB can't
+// be written from anywhere else in this setup).
+function applyFinalRoster() {
+  state.teamNames = DEFAULT_TEAMS.map(p => [...p]);
+  state.teamsData = POOL_NAMES.map((_, pi) =>
+    DEFAULT_TEAMS[pi].map((name, ti) => ({ teamName: name, players: [...ROSTERS[pi][ti]] })));
+  // If a tournament is already generated, keep its matches/scores but refresh
+  // the team names so pool standings and the bracket show A1-B8.
+  if (state.pools?.teams) {
+    state.teamNames.forEach((pool, pi) =>
+      pool.forEach((n, ti) => { if (state.pools.teams[pi]) state.pools.teams[pi][ti] = n; }));
+    syncToFirebase({ pools: state.pools, phase: state.phase });
+  }
+  syncTeamsData();
+}
+
+export { state, isAdmin, isConfigured, db, applyFinalRoster,
          syncToFirebase, syncTeamsData, syncSchedule, syncAuditLog, addAuditEntry,
          syncInventory, syncDaySchedule, startFirebaseListener };
