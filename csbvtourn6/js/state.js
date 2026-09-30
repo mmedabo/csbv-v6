@@ -110,26 +110,28 @@ function startFirebaseListener() {
    Each roster is [male 1, male 2, female] to match the players[] order used
    throughout the app.
 ========================================================================== */
+// Pool A = odd rows of the source table (1,3,5,...,15);
+// Pool B = even rows (2,4,6,...,16).
 const ROSTERS = [
-  [ // Pool A
-    ["Stanley","Dennis","Minky"],       // A1
-    ["Josh","Mika","Iris"],             // A2
-    ["Eugene","Ray","Kelly"],           // A3
-    ["Ivan A","Sup","gladys"],          // A4
-    ["Gene","Aly","Julia"],             // A5
-    ["Alex","Adrian Lowry","gidselle"], // A6
-    ["EK","Todd","Jolene"],             // A7
-    ["Jules","Ash","Karen"],            // A8
+  [ // Pool A (odd rows)
+    ["Stanley","Dennis","Minky"],       // A1  (row 1)
+    ["Eugene","Ray","Kelly"],           // A2  (row 3)
+    ["Gene","Aly","Julia"],             // A3  (row 5)
+    ["EK","Todd","Jolene"],             // A4  (row 7)
+    ["Barath","Pram","Isla"],           // A5  (row 9)
+    ["Mitchell","Maddy","Liz"],         // A6  (row 11)
+    ["Rossi","Shane","Solène"],         // A7  (row 13)
+    ["Anand","Din","Anna"],             // A8  (row 15)
   ],
-  [ // Pool B
-    ["Barath","Pram","Isla"],           // B1
-    ["Henry","Yatha","Bernie"],         // B2
-    ["Mitchell","Maddy","Liz"],         // B3
-    ["Anas","Marcus","Carla"],          // B4
-    ["Rossi","Shane","Solène"],         // B5
-    ["Fai","Sat","Dewi"],               // B6
-    ["Anand","Din","Anna"],             // B7
-    ["Ivan T","David","Jess"],          // B8
+  [ // Pool B (even rows)
+    ["Josh","Mika","Iris"],             // B1  (row 2)
+    ["Ivan A","Sup","gladys"],          // B2  (row 4)
+    ["Alex","Adrian Lowry","gidselle"], // B3  (row 6)
+    ["Jules","Ash","Karen"],            // B4  (row 8)
+    ["Henry","Yatha","Bernie"],         // B5  (row 10)
+    ["Anas","Marcus","Carla"],          // B6  (row 12)
+    ["Fai","Sat","Dewi"],               // B7  (row 14)
+    ["Ivan T","David","Jess"],          // B8  (row 16)
   ],
 ];
 
