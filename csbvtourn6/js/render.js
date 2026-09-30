@@ -513,6 +513,12 @@ function renderTournament() {
         <span class="tag">Edit team names before generating the tournament</span>
       </div>
       <div class="setup-grid">${poolSetup}</div>
+      <button class="btn btn-save btn-lg" onclick="loadFinalRoster()" style="margin-top:20px">
+        &#11015;&#65039; Load Final Roster (A1&ndash;B8)
+      </button>
+      <div class="tag" style="display:block;text-align:center;margin-top:6px">
+        Fills all 16 teams with the final players and pushes them live.
+      </div>
       <button class="btn btn-go btn-lg" onclick="confirmGenerate()">
         ${alreadyStarted ? "&#128260; Reset & Regenerate Tournament" : "&#127952; Generate Tournament"}
       </button>`;
