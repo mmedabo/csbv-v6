@@ -837,13 +837,24 @@ function renderTournament() {
         (byPoolRound[m.poolIdx] ||= {});
         (byPoolRound[m.poolIdx][m.round] ||= []).push(m);
       });
+      // Assign each round's matches to the 4 pool courts, rotating by round so a
+      // team is not stuck on the same court for all its games.
+      const cellAt = {}; // "pool-round-lane" -> match
+      Object.keys(byPoolRound).forEach(pi => {
+        Object.keys(byPoolRound[pi]).forEach(r => {
+          byPoolRound[pi][r].forEach((m, j) => {
+            const lane = (j + (Number(r) - 1)) % 4;
+            cellAt[`${pi}-${r}-${lane}`] = m;
+          });
+        });
+      });
       const maxRound = allPoolMatches.reduce((mx,m)=>Math.max(mx,m.round),1);
       const roundsArr = Array.from({length:maxRound},(_,i)=>i+1);
       const lanes = [];
       POOL_NAMES.forEach((pn,pi)=>{ for(let l=0;l<4;l++) lanes.push({ pi, laneIdx:l, court:`${pn}${l+1}` }); });
       const gridRows = lanes.map(ln => {
         const cells = roundsArr.map(r => {
-          const m = (byPoolRound[ln.pi]?.[r]||[])[ln.laneIdx];
+          const m = cellAt[`${ln.pi}-${r}-${ln.laneIdx}`];
           if (!m) return `<td class="gc gc-empty">&mdash;</td>`;
           const w1 = m.status==="done" && m.s1>m.s2;
           const w2 = m.status==="done" && m.s2>m.s1;
