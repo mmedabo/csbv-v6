@@ -182,7 +182,7 @@ let state = {
   ],
   hiddenRules: {}, // { ruleNumber: true } — rule cards hidden from viewers (synced)
   scheduleSearch: "", // Schedule tab player/team filter — UI only, not synced
-  scheduleView: "list", // Schedule tab view: "list" | "grid" — UI only
+  scheduleView: "grid", // Schedule tab view: "list" | "grid" — UI only
   expandedTeams: {}, // { 'poolIdx-teamName': true } — UI only, not synced
   expandedPools: { 0:true, 1:false }, // only Pool A open by default
   auditLog: [],
