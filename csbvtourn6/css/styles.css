@@ -585,7 +585,7 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .format-banner-ko{border-color:#FFD16644;background:#1A1608;}
 .format-banner-title{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;
   letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
-.format-rules{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.format-rules{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
 .format-rule{display:flex;flex-direction:column;align-items:center;min-width:52px;}
 .format-rule-num{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;
   color:var(--accent);line-height:1;}
@@ -593,6 +593,15 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .format-rule-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;
   text-align:center;margin-top:1px;}
 .format-sep{color:var(--border);font-size:.5rem;}
+/* Keep the three format stats on a single row on phones */
+@media(max-width:520px){
+  .format-banner{flex-direction:column;align-items:stretch;gap:8px;}
+  .format-rules{width:100%;justify-content:space-between;gap:4px;}
+  .format-rule{min-width:0;flex:1;}
+  .format-rule-num{font-size:1.3rem;}
+  .format-rule-lbl{font-size:.52rem;letter-spacing:.2px;margin-top:2px;}
+  .format-sep{display:none;}
+}
 
 /* ── RULES (animated SVG explainers) ── */
 .rules-wrap{max-width:1180px;margin:0 auto;}

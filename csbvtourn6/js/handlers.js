@@ -31,6 +31,7 @@ window.enterViewer = () => {
   state.tab  = "overview";
   startFirebaseListener();
   render();
+  try { window.scrollTo(0, 0); } catch (e) {}
 };
 
 window.showPinModal = () => {
@@ -100,6 +101,7 @@ window.setTab         = (t)=>{
   try { history.replaceState(null, "", t === "overview" ? location.pathname : "#" + t); }
   catch (e) { /* ignore */ }
   render();
+  try { window.scrollTo(0, 0); } catch (e) {}
 };
 window.togglePoolExpand = (pi) => {
   state.expandedPools[pi] = !( state.expandedPools[pi] !== false );
