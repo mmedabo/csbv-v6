@@ -471,9 +471,9 @@ function renderTournament() {
       <button class="tab ${tab==="overview"?"on":""}" onclick="setTab('overview')">Overview</button>
       <button class="tab ${tab==="rules"?"on":""}" onclick="setTab('rules')">&#128214; Rules</button>
       <button class="tab ${tab==="pools"?"on":""}" onclick="setTab('pools')">Pools</button>
+      <button class="tab ${tab==='schedule'?'on':''}" onclick="setTab('schedule')">Schedule</button>
       <button class="tab ${tab==="knockout"?"on":""}" onclick="setTab('knockout')">Knockout</button>
       <button class="tab ${tab==="teams"?"on":""}" onclick="setTab('teams')">Teams</button>
-      <button class="tab ${tab==='schedule'?'on':''}" onclick="setTab('schedule')">Schedule</button>
       <button class="tab ${tab==="sponsors"?"on":""}" onclick="setTab('sponsors')">&#127775; Sponsors</button>
       <button class="tab ${tab==="history"?"on":""}" onclick="setTab('history')">History</button>
       ${admin ? `<button class="tab ${tab==="inventory"?"on":""}" onclick="setTab('inventory')">Inventory</button><button class="tab ${tab==="setup"?"on":""}" onclick="setTab('setup')">&#9881; Setup</button>` : ""}
