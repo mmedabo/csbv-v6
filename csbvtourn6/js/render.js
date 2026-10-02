@@ -14,7 +14,7 @@ const SPONSORS = [
   { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#1C82BE",
     desc:"Cold-water recovery & ice baths to keep players fresh all day.",
     link:"theicebathclubs.com", href:"https://www.theicebathclubs.com", ig:"icebathclub_sg" },
-  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", color:"#C0392B",
+  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", logoDark:"sponsor-anhe-dark.png", color:"#C0392B",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
@@ -71,8 +71,10 @@ function sponsorsContent() {
     return `
       <div class="spon-card" style="border-top:3px solid ${s.color}">
         <div class="spon-logo-wrap">
-          <img src="images/${s.logo}" alt="${esc(s.name)}"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          ${s.logoDark
+            ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
+            : `<img src="images/${s.logo}" alt="${esc(s.name)}"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>`}
           <div class="spon-logo-fallback" style="display:none;color:${s.color}">${esc(s.name)}</div>
         </div>
         <div class="spon-name">${esc(s.name)}</div>
