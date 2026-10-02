@@ -388,6 +388,46 @@ function koCardHTML(m, stage, idx) {
   </div>`;
 }
 
+// All permutations of the four court lanes [0,1,2,3].
+const PERMS4 = (() => {
+  const out = [];
+  const perm = (arr, acc=[]) => {
+    if (!arr.length) { out.push(acc); return; }
+    for (let i=0;i<arr.length;i++) perm(arr.slice(0,i).concat(arr.slice(i+1)), acc.concat(arr[i]));
+  };
+  perm([0,1,2,3]);
+  return out;
+})();
+
+// Assign each pool match to one of the 4 courts so every team plays each court
+// at most twice (7 games / 4 courts → a {2,2,2,1} split, no team stuck on one
+// court). Deterministic backtracking over per-round court permutations; falls
+// back to a simple rotation if no perfect assignment exists (e.g. a bye round).
+function balancedCourtLanes(poolMatches) {
+  const byRound = {};
+  poolMatches.forEach(m => (byRound[m.round] ||= []).push(m));
+  const rounds = Object.keys(byRound).map(Number).sort((a,b)=>a-b);
+  const count = {};
+  const c = t => (count[t] ||= [0,0,0,0]);
+  const laneBy = {};
+  const okAdd = (ms, p) => ms.every((m,k) => c(m.t1)[p[k]] < 2 && c(m.t2)[p[k]] < 2);
+  const place = (ms, p, d) => ms.forEach((m,k) => { c(m.t1)[p[k]] += d; c(m.t2)[p[k]] += d; });
+  const bt = (ri) => {
+    if (ri === rounds.length) return true;
+    const ms = byRound[rounds[ri]];
+    for (const perm of PERMS4) {
+      const p = perm.slice(0, ms.length);
+      if (!okAdd(ms, p)) continue;
+      place(ms, p, 1); ms.forEach((m,k) => laneBy[m.id] = p[k]);
+      if (bt(ri+1)) return true;
+      place(ms, p, -1);
+    }
+    return false;
+  };
+  if (!bt(0)) rounds.forEach((r,ri) => byRound[r].forEach((m,k) => laneBy[m.id] = (k+ri)%4));
+  return laneBy;
+}
+
 /* ==========================================================================
    RENDER - SHARED TOURNAMENT VIEW (pools + knockout)
 ========================================================================== */
@@ -832,21 +872,14 @@ function renderTournament() {
         <div class="sched-empty" style="display:none">No player or team matches that search.</div>`;
 
       // GRID VIEW: courts (A1-A4, B1-B4) down the side, rounds across the top.
-      const byPoolRound = {};
-      allPoolMatches.forEach(m => {
-        (byPoolRound[m.poolIdx] ||= {});
-        (byPoolRound[m.poolIdx][m.round] ||= []).push(m);
-      });
-      // Assign each round's matches to the 4 pool courts, rotating by round so a
-      // team is not stuck on the same court for all its games.
+      // Balanced court assignment: each team plays each court at most twice.
+      const byId = {};
+      allPoolMatches.forEach(m => { byId[m.id] = m; });
       const cellAt = {}; // "pool-round-lane" -> match
-      Object.keys(byPoolRound).forEach(pi => {
-        Object.keys(byPoolRound[pi]).forEach(r => {
-          byPoolRound[pi][r].forEach((m, j) => {
-            const lane = (j + (Number(r) - 1)) % 4;
-            cellAt[`${pi}-${r}-${lane}`] = m;
-          });
-        });
+      POOL_NAMES.forEach((pn, pi) => {
+        const poolMs = pools.matches[pi] || [];
+        const laneBy = balancedCourtLanes(poolMs);
+        poolMs.forEach(m => { cellAt[`${pi}-${m.round}-${laneBy[m.id]}`] = byId[m.id]; });
       });
       const maxRound = allPoolMatches.reduce((mx,m)=>Math.max(mx,m.round),1);
       const roundsArr = Array.from({length:maxRound},(_,i)=>i+1);
