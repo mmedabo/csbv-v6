@@ -14,7 +14,7 @@ const SPONSORS = [
   { name:"The Ice Bath Club", logo:"sponsor-icebath.png", color:"#1C82BE",
     desc:"Cold-water recovery & ice baths to keep players fresh all day.",
     link:"theicebathclubs.com", href:"https://www.theicebathclubs.com", ig:"icebathclub_sg" },
-  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", logoDark:"sponsor-anhe-dark.png", color:"#C0392B",
+  { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", whiteBg:true, color:"#C0392B",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
 ];
@@ -32,7 +32,7 @@ function sponsorLogoLink(s) {
   const img = s.logoDark
     ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
     : `<img src="images/${s.logo}" alt="${esc(s.name)}"/>`;
-  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link" title="${esc(s.name)}">${img}</a>`;
+  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link${s.whiteBg?" spon-white":""}" title="${esc(s.name)}">${img}</a>`;
 }
 
 // Sponsor logo bar: all logos evenly spaced. variant "bar" (sticky top strip
@@ -70,7 +70,7 @@ function sponsorsContent() {
       ? `<div class="spon-links">${webLink}${igLink}</div>` : "";
     return `
       <div class="spon-card" style="border-top:3px solid ${s.color}">
-        <div class="spon-logo-wrap">
+        <div class="spon-logo-wrap${s.whiteBg?" spon-white":""}">
           ${s.logoDark
             ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
             : `<img src="images/${s.logo}" alt="${esc(s.name)}"
