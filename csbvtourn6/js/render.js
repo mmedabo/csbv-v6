@@ -17,6 +17,8 @@ const SPONSORS = [
   { name:"ANHE TCM Clinic", logo:"sponsor-anhe.png", whiteBg:true, color:"#C0392B",
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
+  { name:"Sunday Shades", logo:"sponsor-sunday.png", color:"#E89A1C",
+    desc:"Premium shades & sun protection to keep players covered all day." },
 ];
 
 // CSBV logo — theme-specific artwork:
@@ -32,7 +34,10 @@ function sponsorLogoLink(s) {
   const img = s.logoDark
     ? `<img class="spon-img-light" src="images/${s.logo}" alt="${esc(s.name)}"/><img class="spon-img-dark" src="images/${s.logoDark}" alt="${esc(s.name)}"/>`
     : `<img src="images/${s.logo}" alt="${esc(s.name)}"/>`;
-  return `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="spon-logo-link${s.whiteBg?" spon-white":""}" title="${esc(s.name)}">${img}</a>`;
+  const cls = `spon-logo-link${s.whiteBg?" spon-white":""}`;
+  return s.href
+    ? `<a href="${esc(s.href)}" target="_blank" rel="noopener" class="${cls}" title="${esc(s.name)}">${img}</a>`
+    : `<span class="${cls}" title="${esc(s.name)}">${img}</span>`;
 }
 
 // Sponsor logo bar: all logos evenly spaced. variant "bar" (sticky top strip
