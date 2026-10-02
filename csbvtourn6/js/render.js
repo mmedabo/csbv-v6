@@ -21,6 +21,10 @@ const SPONSORS = [
     tagline:"‘Asian Fit, Won’t Slide’",
     desc:"Premium shades & sun protection to keep players covered all day.",
     link:"sundayshades.co", href:"https://sundayshades.co/", ig:"sundayshadesco" },
+  { name:"tenplus", logo:"sponsor-tenplus.png", logoDark:"sponsor-tenplus-dark.png", color:"#EB5E28",
+    tagline:"Beyond electrolytes. Built for more.",
+    desc:"Hydration drink-mix built for real life in hot, humid climates.",
+    link:"mytenplus.com", href:"https://mytenplus.com/", ig:"wearetenplus" },
 ];
 
 // CSBV logo — theme-specific artwork:
