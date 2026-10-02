@@ -761,6 +761,23 @@ function renderTournament() {
           t1name: pools.teams[pi][m.t1], t2name: pools.teams[pi][m.t2] }))
       );
 
+      // Players on a team (by pool + team index) for the player/team search.
+      const playersOf = (pi, ti) => ((state.teamsData?.[pi]?.[ti]?.players) || []).filter(Boolean).join(" ");
+      const searchStr = (m) => `${m.t1name} ${m.t2name} ${playersOf(m.poolIdx,m.t1)} ${playersOf(m.poolIdx,m.t2)}`.toLowerCase();
+      const view = state.scheduleView === "grid" ? "grid" : "list";
+
+      const searchBar = `
+        <div class="sched-search">
+          <input id="sched-search-inp" class="sched-search-inp" type="text"
+            placeholder="&#128269; Find a player or team &mdash; see their matches"
+            value="${esc(state.scheduleSearch||"")}" oninput="filterSchedule(this.value)"/>
+          <button class="btn btn-ghost btn-sm" onclick="clearScheduleSearch()">Clear</button>
+          <span class="sched-view-toggle">
+            <button class="btn btn-ghost btn-sm ${view==="list"?"vt-on":""}" onclick="setScheduleView('list')">List</button>
+            <button class="btn btn-ghost btn-sm ${view==="grid"?"vt-on":""}" onclick="setScheduleView('grid')">Grid</button>
+          </span>
+        </div>`;
+
       const schedRows = allPoolMatches.map(m => {
         const sched = state.schedule[m.id] || {};
         // Map legacy "Court N" values saved before courts were renamed A1-D2
@@ -782,7 +799,7 @@ function renderTournament() {
                onchange="setScheduleTime('${m.id}',this.value)"/>`
           : `<span style="color:${time?"var(--text)":"var(--muted)"}">${time||"\u2014"}</span>`;
 
-        return `<tr class="sched-row">
+        return `<tr class="sched-row" data-search="${esc(searchStr(m))}">
           <td><span class="sched-pool-pill" style="background:${m.poolColor}22;color:${m.poolColor};border:1px solid ${m.poolColor}55">
             Pool ${m.poolName}</span></td>
           <td style="color:var(--muted);font-size:.78rem">R${m.round} \u00b7 #${m.slot}</td>
@@ -803,11 +820,7 @@ function renderTournament() {
         </tr>`;
       }).join("");
 
-      content = `
-        <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span class="tag">${admin?"Assign courts & times to each pool match":"Full match schedule"}</span>
-          ${admin?`<span style="font-size:.75rem;color:var(--muted)">Changes sync live</span>`:""}
-        </div>
+      const listView = `
         <div class="sched-table-wrap">
           <table class="sched-table">
             <thead><tr>
@@ -815,7 +828,51 @@ function renderTournament() {
             </tr></thead>
             <tbody>${schedRows}</tbody>
           </table>
-        </div>`;
+        </div>
+        <div class="sched-empty" style="display:none">No player or team matches that search.</div>`;
+
+      // GRID VIEW: courts (A1-A4, B1-B4) down the side, rounds across the top.
+      const byPoolRound = {};
+      allPoolMatches.forEach(m => {
+        (byPoolRound[m.poolIdx] ||= {});
+        (byPoolRound[m.poolIdx][m.round] ||= []).push(m);
+      });
+      const maxRound = allPoolMatches.reduce((mx,m)=>Math.max(mx,m.round),1);
+      const roundsArr = Array.from({length:maxRound},(_,i)=>i+1);
+      const lanes = [];
+      POOL_NAMES.forEach((pn,pi)=>{ for(let l=0;l<4;l++) lanes.push({ pi, laneIdx:l, court:`${pn}${l+1}` }); });
+      const gridRows = lanes.map(ln => {
+        const cells = roundsArr.map(r => {
+          const m = (byPoolRound[ln.pi]?.[r]||[])[ln.laneIdx];
+          if (!m) return `<td class="gc gc-empty">&mdash;</td>`;
+          const w1 = m.status==="done" && m.s1>m.s2;
+          const w2 = m.status==="done" && m.s2>m.s1;
+          const score = m.status==="done" ? `${m.s1}–${m.s2}` : m.status==="live" ? "LIVE" : "—";
+          return `<td class="gc" data-search="${esc(searchStr(m))}">
+            <div class="gc-cell" style="border-left:3px solid ${m.poolColor}">
+              <span class="gc-team ${w1?"gc-won":""}">${esc(m.t1name)}</span>
+              <span class="gc-score ${m.status==="live"?"gc-live":""}">${score}</span>
+              <span class="gc-team ${w2?"gc-won":""}">${esc(m.t2name)}</span>
+            </div></td>`;
+        }).join("");
+        return `<tr><th class="gc-court" style="color:${POOL_COLORS[ln.pi]}">${ln.court}</th>${cells}</tr>`;
+      }).join("");
+      const gridView = `
+        <div class="sched-grid-wrap">
+          <table class="sched-grid">
+            <thead><tr><th class="gc-court gc-corner">Court</th>${roundsArr.map(r=>`<th>R${r}</th>`).join("")}</tr></thead>
+            <tbody>${gridRows}</tbody>
+          </table>
+        </div>
+        <div class="sched-note">Swipe sideways to see all rounds &mdash; the court column stays put. Courts shown by pool &amp; round order; the List view has the assigned courts &amp; times.</div>`;
+
+      content = `
+        <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span class="tag">${admin?"Assign courts & times to each pool match":"Full match schedule"}</span>
+          ${admin?`<span style="font-size:.75rem;color:var(--muted)">Changes sync live</span>`:""}
+        </div>
+        ${searchBar}
+        ${view==="grid" ? gridView : listView}`;
     }
   }
 
@@ -1129,6 +1186,8 @@ function render() {
     if (onTab) {
       tabsEl.scrollLeft = Math.max(0, onTab.offsetLeft - (tabsEl.clientWidth - onTab.offsetWidth) / 2);
     }
+    // Re-apply the schedule player/team filter after a re-render
+    if (state.tab === "schedule" && typeof window.applyScheduleFilter === "function") window.applyScheduleFilter();
   }
   // Re-attach pin modal if on landing
   if (state.pinError) {

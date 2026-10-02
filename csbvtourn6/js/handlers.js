@@ -170,6 +170,43 @@ window.loadFinalRoster = () => {
   alert("Final roster loaded and synced to all viewers.");
 };
 
+/* ---- Schedule player/team search + view toggle ---- */
+window.applyScheduleFilter = () => {
+  const q = (state.scheduleSearch || "").trim().toLowerCase();
+  const rows = document.querySelectorAll(".sched-row");
+  let visible = 0;
+  rows.forEach(r => {
+    const hit = !q || (r.dataset.search || "").includes(q);
+    r.style.display = hit ? "" : "none";
+    if (hit) visible++;
+  });
+  const emptyEl = document.querySelector(".sched-empty");
+  if (emptyEl) emptyEl.style.display = (q && rows.length && visible === 0) ? "block" : "none";
+  // Grid view: dim non-matching cells, highlight matches (don't collapse the grid)
+  document.querySelectorAll(".sched-grid .gc").forEach(c => {
+    const hit = (c.dataset.search || "").includes(q);
+    c.classList.toggle("gc-dim", !!q && !hit);
+    c.classList.toggle("gc-hit", !!q && hit);
+  });
+};
+
+window.filterSchedule = (q) => {
+  state.scheduleSearch = q;
+  applyScheduleFilter();
+};
+
+window.clearScheduleSearch = () => {
+  state.scheduleSearch = "";
+  const inp = document.getElementById("sched-search-inp");
+  if (inp) inp.value = "";
+  applyScheduleFilter();
+};
+
+window.setScheduleView = (v) => {
+  state.scheduleView = (v === "grid") ? "grid" : "list";
+  render();
+};
+
 window.toggleRuleVisibility = (n) => {
   if (!state.hiddenRules) state.hiddenRules = {};
   if (state.hiddenRules[n]) delete state.hiddenRules[n];
