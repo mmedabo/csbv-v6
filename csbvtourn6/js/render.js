@@ -18,7 +18,8 @@ const SPONSORS = [
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
   { name:"Sunday Shades", logo:"sponsor-sunday.png", color:"#E89A1C",
-    desc:"Premium shades & sun protection to keep players covered all day." },
+    desc:"Premium shades & sun protection to keep players covered all day.",
+    link:"sundayshades.co", href:"https://sundayshades.co/", ig:"sundayshadesco" },
 ];
 
 // CSBV logo — theme-specific artwork:
