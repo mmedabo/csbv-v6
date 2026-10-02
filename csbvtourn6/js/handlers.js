@@ -219,7 +219,7 @@ window.toggleRuleVisibility = (n) => {
 
 window.setAllRules = (hide) => {
   state.hiddenRules = {};
-  if (hide) for (let n = 1; n <= 15; n++) state.hiddenRules[n] = true;
+  if (hide) for (let n = 1; n <= 16; n++) state.hiddenRules[n] = true;
   syncRulesConfig();
   render();
 };
