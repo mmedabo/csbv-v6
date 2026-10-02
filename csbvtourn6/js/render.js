@@ -18,7 +18,8 @@ const SPONSORS = [
     desc:"Traditional Chinese Medicine — recovery, treatment & wellness.",
     link:"anhezhongyi", href:"https://sitelift.site/anhezhongyi/", ig:"anhetcm" },
   { name:"Sunday Shades", logo:"sponsor-sunday.png", color:"#E89A1C",
-    desc:"‘Asian Fit, Won’t Slide’ — premium shades & sun protection, all day.",
+    tagline:"‘Asian Fit, Won’t Slide’",
+    desc:"Premium shades & sun protection to keep players covered all day.",
     link:"sundayshades.co", href:"https://sundayshades.co/", ig:"sundayshadesco" },
 ];
 
@@ -84,6 +85,7 @@ function sponsorsContent() {
           <div class="spon-logo-fallback" style="display:none;color:${s.color}">${esc(s.name)}</div>
         </div>
         <div class="spon-name">${esc(s.name)}</div>
+        ${s.tagline ? `<div class="spon-tag" style="color:${s.color}">${esc(s.tagline)}</div>` : ""}
         <div class="spon-desc">${esc(s.desc)}</div>
         ${linksHTML}
       </div>`;
