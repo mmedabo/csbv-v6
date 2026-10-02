@@ -670,6 +670,9 @@ code{background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.82em
 .spon-splitbar-hero{width:auto;align-self:stretch;margin:0 -16px;padding:16px 8px 8px;}
 .spon-logo-link{display:inline-flex;align-items:center;opacity:.94;transition:opacity .18s,transform .18s;}
 .spon-logo-link:hover{opacity:1;transform:translateY(-1px);}
+/* Sponsors that need a fixed white backdrop in both themes (e.g. ANHE TCM) */
+.spon-logo-link.spon-white{background:#fff;border-radius:8px;padding:5px 9px;}
+.spon-logo-wrap.spon-white{background:#fff;border-radius:10px;padding:8px 12px;}
 .spon-splitbar img{width:auto;max-width:100%;object-fit:contain;border-radius:6px;display:block;}
 .spon-splitbar-bar img{height:34px;max-height:34px;}
 .spon-splitbar-hero img{height:78px;max-height:78px;}
