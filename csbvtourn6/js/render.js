@@ -1251,7 +1251,7 @@ const RULE_META = [
   { n:9,  title:"No Block/Spike on Serve" }, { n:10, title:"Clean Set (no spin)" },
   { n:11, title:"Set Over Net (square)" },   { n:12, title:"Serve Order" },
   { n:13, title:"Net Touch (fault)" },       { n:14, title:"Under the Net" },
-  { n:15, title:"Clean Contact (no lift)" },
+  { n:15, title:"Clean Contact (no lift)" }, { n:16, title:"Net Pole = Out" },
 ];
 
 function rulesContent() {
@@ -1791,6 +1791,63 @@ function rulesContent() {
       </g>
       <text x="200" y="282" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-size="16" fill="#F4E9C8" letter-spacing="1">HIT IT CLEAN</text>
       <text x="200" y="306" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#9CC3BD">No catching, holding, lifting or throwing</text>
+    </svg>
+    </div>
+
+    <!-- 16. NET POLE (out) -->
+    <div class="rules-card" id="rule-16">
+    <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ball that hits the net pole is out and the rally ends">
+      <style>
+        .r16-ball{animation:r16b 3s linear infinite}
+        @keyframes r16b{0%,70%{opacity:1}78%,100%{opacity:0}}
+        .r16-ring{opacity:0;animation:r16r 3s infinite;transform-origin:294px 150px;transform-box:view-box}
+        @keyframes r16r{0%,48%{opacity:0;transform:scale(.2)}53%{opacity:.9;transform:scale(.6)}64%{opacity:0;transform:scale(1.6)}100%{opacity:0}}
+        .r16-spark{opacity:0;animation:r16s 3s infinite}
+        @keyframes r16s{0%,48%{opacity:0}53%{opacity:1}62%,100%{opacity:0}}
+        .r16-out{opacity:0;animation:r16o 3s infinite;transform-origin:326px 104px;transform-box:view-box}
+        @keyframes r16o{0%,50%{opacity:0;transform:scale(.4)}58%{opacity:1;transform:scale(1.2)}66%{transform:scale(1)}94%{opacity:1}100%{opacity:0}}
+      </style>
+      <rect width="400" height="330" rx="14" fill="#0F4347"/>
+      <text x="200" y="42" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-weight="700" font-size="24" fill="#E04444" letter-spacing="2">NET POLE</text>
+      <rect x="40" y="236" width="320" height="9" rx="4" fill="#E3CFA0"/>
+      <!-- net mesh -->
+      <rect x="120" y="120" width="174" height="116" fill="none" stroke="#F4E9C8" stroke-width="1" opacity=".5"/>
+      <g stroke="#F4E9C8" stroke-width="1" opacity=".4">
+        <line x1="150" y1="120" x2="150" y2="236"/><line x1="180" y1="120" x2="180" y2="236"/>
+        <line x1="210" y1="120" x2="210" y2="236"/><line x1="240" y1="120" x2="240" y2="236"/><line x1="270" y1="120" x2="270" y2="236"/>
+        <line x1="120" y1="150" x2="294" y2="150"/><line x1="120" y1="180" x2="294" y2="180"/><line x1="120" y1="210" x2="294" y2="210"/>
+      </g>
+      <!-- top tape -->
+      <line x1="120" y1="120" x2="294" y2="120" stroke="#F4E9C8" stroke-width="4"/>
+      <!-- the net pole, drawn as the red & white antenna players recognise -->
+      <g>
+        <rect x="290" y="88" width="8" height="154" rx="4" fill="#F4E9C8"/>
+        <rect x="290" y="104" width="8" height="18" fill="#E04444"/>
+        <rect x="290" y="140" width="8" height="18" fill="#E04444"/>
+        <rect x="290" y="176" width="8" height="18" fill="#E04444"/>
+        <rect x="290" y="212" width="8" height="18" fill="#E04444"/>
+        <circle cx="294" cy="86" r="6" fill="#E04444"/>
+      </g>
+      <!-- impact spark + flash ring at the pole -->
+      <g class="r16-spark" stroke="#FFD166" stroke-width="3" stroke-linecap="round">
+        <line x1="282" y1="150" x2="266" y2="150"/>
+        <line x1="286" y1="138" x2="276" y2="126"/>
+        <line x1="286" y1="162" x2="276" y2="174"/>
+      </g>
+      <circle class="r16-ring" cx="294" cy="150" r="20" fill="none" stroke="#E04444" stroke-width="4"/>
+      <!-- ball: flies over the net, ricochets off the pole and flies out -->
+      <g class="r16-ball">
+        <circle r="11" fill="#E96B3C"/>
+        <path d="M-11,0 Q0,-7 11,0 M-11,0 Q0,7 11,0 M0,-11 Q5,0 0,11" fill="none" stroke="#0F4347" stroke-width="1.6"/>
+        <animateMotion dur="3s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.5;0.7;1" keyPoints="0;0.74;1;1" path="M58,192 Q186,70 290,150 Q324,126 368,152"/>
+      </g>
+      <!-- OUT badge -->
+      <g class="r16-out">
+        <circle cx="326" cy="104" r="21" fill="#E04444"/>
+        <text x="326" y="110" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-weight="700" font-size="16" fill="#fff" letter-spacing="1">OUT</text>
+      </g>
+      <text x="200" y="282" text-anchor="middle" font-family="Oswald,Arial Narrow,sans-serif" font-size="16" fill="#F4E9C8" letter-spacing="1">OFF THE POLE = OUT</text>
+      <text x="200" y="306" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#9CC3BD">Ball hits the net pole &rarr; out, rally ends</text>
     </svg>
     </div>
 
